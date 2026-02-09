@@ -14,7 +14,7 @@ async def post_preferences(preferences : PreferencesPost, db: Session = Depends(
     except InvalidUserId as e:
         raise HTTPException(
             status_code=404,
-            detail="User does not exist"
+            detail=str(e)
             )
 
 @router.patch("/")
@@ -25,6 +25,6 @@ async def update_preferences(new_preferences : PreferencesPost, db: Session = De
     except InvalidUserId as e:
         raise HTTPException(
             status_code=404,
-            detail="test"
+            detail=str(e)
             )
     
