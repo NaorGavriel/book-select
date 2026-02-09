@@ -18,7 +18,7 @@ class Book(Base):
 
     title: Mapped[str] = mapped_column(String, index=True)
     authors: Mapped[list[str]] = mapped_column(JSONB)
-    categories: Mapped[list[str]] = mapped_column(JSONB)
+    genres: Mapped[list[str]] = mapped_column(JSONB)
 
     language: Mapped[str | None] = mapped_column(String, nullable=True)
     average_rating: Mapped[float | None] = mapped_column(Float, nullable=True)

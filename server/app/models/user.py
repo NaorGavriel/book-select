@@ -19,7 +19,7 @@ class User(Base):
 
     # One-to-one relationship to the user's preferences
     preferences = relationship(
-        "UserPreferences",
+        "Preferences",
         back_populates="user",
         uselist=False
     )
