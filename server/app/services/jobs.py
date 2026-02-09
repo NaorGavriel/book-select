@@ -1,6 +1,6 @@
 from sqlalchemy.orm import Session
 from app.crud.jobs import create_job, get_job_by_id
-#from app.tasks.jobs import process_job
+from app.tasks import process_job
 from app.storage.storage_factory import get_storage_backend
 from app.storage.storage_base import StorageBase
 from app.models.jobs import Job
@@ -28,7 +28,7 @@ def create_job_from_image(user_id: int, image_bytes: bytes,filename: str,db: Ses
     )
 
     # enqueing job processing task
-    #process_job.delay(job.id)
+    process_job.delay(job.id)
 
     return job
 
