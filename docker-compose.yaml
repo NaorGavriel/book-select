@@ -6,6 +6,7 @@ services:
     command: ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000", "--reload"] # Run FastAPI with Uvicorn in development mode
     volumes:
       - ./server/app:/code/app
+      - ./server/storage:/code/storage
     ports:
       - "8000:8000" # host:container
     environment:
@@ -21,6 +22,7 @@ services:
     command: celery -A app.celery_app.celery_app worker --loglevel=info # -A points to the Celery app instance
     volumes:
       - ./server/app:/code/app # Mount source code for live development and task changes
+      - ./server/storage:/code/storage
     environment:
       DATABASE_URL: postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@db:5432/${POSTGRES_DB}
       REDIS_URL: ${REDIS_URL} # Redis connection URL
