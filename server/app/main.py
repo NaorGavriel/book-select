@@ -6,14 +6,10 @@ from app.routes.users import router as users_router
 from app.routes.preferences import router as preferences_router
 from app.routes.jobs import router as jobs_router
 from app.routes.job_results import router as job_results_router
-
 import app.models
 
-
-
-
 @asynccontextmanager
-async def lifespan(app: FastAPI):
+async def lifespan():
     Base.metadata.create_all(bind=engine)
     yield
 

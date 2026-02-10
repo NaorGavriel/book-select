@@ -9,4 +9,4 @@ celery_app = Celery(
     backend=REDIS_URL,
 )
 
-celery_app.autodiscover_tasks(["app"])
+celery_app.autodiscover_tasks(["app.job_tasks"])

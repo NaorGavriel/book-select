@@ -26,6 +26,8 @@ services:
     environment:
       DATABASE_URL: postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@db:5432/${POSTGRES_DB}
       REDIS_URL: ${REDIS_URL} # Redis connection URL
+      GOOGLE_BOOKS_API_KEY: ${GOOGLE_BOOKS_API_KEY}
+      GOOGLE_BOOKS_MAX_RESULTS: ${GOOGLE_BOOKS_MAX_RESULTS}
     depends_on: # Worker must start after Redis (broker) and Postgres (storage)
       - redis
       - db

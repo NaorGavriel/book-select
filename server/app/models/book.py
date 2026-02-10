@@ -16,9 +16,15 @@ class Book(Base):
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
 
+
+    isbn_13: Mapped[str] = mapped_column(String, unique=True, nullable=True, index=True)
     title: Mapped[str] = mapped_column(String, index=True)
     authors: Mapped[list[str]] = mapped_column(JSONB)
     genres: Mapped[list[str]] = mapped_column(JSONB)
+
+    normalized_title: Mapped[list[str]] = mapped_column(String, index=True)
+    normalized_authors: Mapped[list[str]] = mapped_column(JSONB)
+
 
     language: Mapped[str | None] = mapped_column(String, nullable=True)
     average_rating: Mapped[float | None] = mapped_column(Float, nullable=True)

@@ -1,6 +1,6 @@
 from sqlalchemy.orm import Session
 from app.crud.jobs import create_job, get_job_by_id
-from app.tasks import process_job
+from app.job_tasks.tasks import process_job
 from app.storage.storage_factory import get_storage_backend
 from app.storage.storage_base import StorageBase
 from app.models.jobs import Job
