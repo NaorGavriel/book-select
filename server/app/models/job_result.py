@@ -1,5 +1,6 @@
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from sqlalchemy import Integer, ForeignKey, Float, String
+from sqlalchemy.dialects.postgresql import JSONB
 from app.models.base import Base
 from app.models.enums import Decision
 
@@ -16,6 +17,12 @@ class JobResult(Base):
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
 
+    user_id: Mapped[int] = mapped_column(
+        Integer,
+        ForeignKey("users.id"),
+        index=True
+    )
+
     # Job that produced this result
     job_id: Mapped[int] = mapped_column(
         Integer,
@@ -24,11 +31,8 @@ class JobResult(Base):
     )
 
     # Book being evaluated
-    book_id: Mapped[int] = mapped_column(
-        Integer,
-        ForeignKey("books.id"),
-        index=True
-    )
+    title: Mapped[str] = mapped_column(String)
+    authors : Mapped[list[str]] = mapped_column(JSONB, default=dict)
 
     # Discrete recommendation category (strong_match / consider / avoid)
     decision: Mapped[Decision] = mapped_column(index=True)

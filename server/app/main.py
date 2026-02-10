@@ -5,6 +5,7 @@ from app.models.base import Base
 from app.routes.users import router as users_router
 from app.routes.preferences import router as preferences_router
 from app.routes.jobs import router as jobs_router
+from app.routes.job_results import router as job_results_router
 
 import app.models
 
@@ -21,4 +22,5 @@ app = FastAPI(lifespan=lifespan)
 app.include_router(users_router, prefix="/api")
 app.include_router(preferences_router, prefix="/api")
 app.include_router(jobs_router, prefix="/api")
+app.include_router(job_results_router, prefix="/api")
 

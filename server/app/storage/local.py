@@ -24,3 +24,12 @@ class LocalStorage(StorageBase):
             f.write(image_bytes)
 
         return key
+    
+    def load_image(self, key: str) -> bytes:
+        '''        
+        Load an image from local storage.
+        '''
+        image_path = self.base_dir / key
+
+        with open(image_path, "rb") as f:
+            return f.read()

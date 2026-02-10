@@ -7,9 +7,17 @@ class StorageBase(ABC):
     """
 
     @abstractmethod
-    def save_image(self,*,image_bytes: bytes,filename: str,user_id: int) -> str:
+    def save_image(self, image_bytes: bytes,filename: str,user_id: int) -> str:
         """
         Save image data and return an identifier.
+        The identifier string's format is backend-specific.
+        """
+        pass
+
+    @abstractmethod
+    def load_image(self, key: str) -> bytes:
+        """
+        Load and return image data as bytes.
         The identifier string's format is backend-specific.
         """
         pass

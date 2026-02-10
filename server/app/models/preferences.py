@@ -22,7 +22,7 @@ class Preferences(Base):
 
     genres: Mapped[dict[str, float]] = mapped_column(JSONB, default=dict)
     authors: Mapped[dict[str, float]] = mapped_column(JSONB, default=dict)
-    excluded_books: Mapped[list[str]] = mapped_column(JSONB, default=dict)
+    excluded_books: Mapped[list[str]] = mapped_column(JSONB, default=list)
 
     updated_at: Mapped[str] = mapped_column(
         DateTime(timezone=True),
