@@ -9,7 +9,7 @@ from app.routes.job_results import router as job_results_router
 import app.models
 
 @asynccontextmanager
-async def lifespan():
+async def lifespan(app: FastAPI):
     Base.metadata.create_all(bind=engine)
     yield
 
