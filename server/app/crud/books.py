@@ -69,9 +69,7 @@ def check_book_cache(session : Session, search_string: str) -> Book | None:
     Returns:
         Best matching Book or None if no strong match is found.
     """
-    BOOK_CACHE_THRESHOLD = 0.20
     # full-text query and ranking expression
-
     ts_query = func.websearch_to_tsquery("english", search_string)
     rank_expr = func.ts_rank(Book.search_vector, ts_query)
 
@@ -92,7 +90,7 @@ def check_book_cache(session : Session, search_string: str) -> Book | None:
     
     book, rank = result
     
-    if rank < THRESHOLD: # checking the best result's rank compared to the threshold
+    if rank < BOOK_CACHE_THRESHOLD: # checking the best result's rank compared to the threshold
             return None
     
     return book
