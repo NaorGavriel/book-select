@@ -1,36 +1,51 @@
+"""
+Book resolution service.
+
+Attempts to resolve OCR-detected book strings using the local cache.
+If no suitable match is found, falls back to Google Books and stores the result.
+"""
 from sqlalchemy.orm import Session
 from app.models.book import Book
-from app.services.books.google_books import search_google_books, extract_book_data, filter_books
-from app.crud.books import get_book_by_title_and_authors, create_book
-from app.services.books.utils import normalize_authors, normalize_title
+from app.services.books.google_books import search_google_books, extract_book_data
+from app.crud.books import create_book, check_book_cache
+from app.utils.text import normalize_text
 
-def resolve_books(db: Session, detected_books: list[dict]) -> list[Book]:
+def resolve_books(db: Session, detected_books: list[str]) -> list[Book]:
+    """
+    Resolve a list of detected book strings to Book records.
 
+    For each detected string:
+    1. Normalize text for consistent searching.
+    2. Attempt cache lookup using full-text search.
+    3. If not found, query Google Books and persist the result.
+
+    Args:
+        db: Active database session.
+        detected_books: OCR-extracted book strings.
+
+    Returns:
+        List of resolved Book objects (cache hits and newly created).
+    """
     resolved = []
 
     for detected_book in detected_books:
-        # normalizing title and authors to search the DB
-        normalized_title = normalize_title(detected_book["title"])
-        normalized_authors = normalize_authors(detected_book["authors"])
-
-        book = get_book_by_title_and_authors(db, normalized_title, normalized_authors)
-
-        if book : # book found, appending relevant book data
-            resolved.append(book)
-            continue
-
-        authors = detected_book.get("authors", [])
-        author = authors[0] if authors else None
-
-        book_api_results = search_google_books(title=detected_book["title"], author=author)
-        book_match = filter_books(normalized_title=normalized_title, candidates=book_api_results)
+        # Normalize OCR text to improve cache matching consistency
+        normalized_text = normalize_text(detected_book)
+        
+        book_match : Book | None = check_book_cache(session=db, search_string=normalized_text)
 
         if book_match is None:
-            continue
+            # Fallback to external search when cache miss occurs
+            book_candidate = search_google_books(normalized_text)
 
-        # extracting relevant book data to persist in database
-        book_data = extract_book_data(book_match)
-        new_book_entry = create_book(db=db, book_data=book_data)
-        resolved.append(new_book_entry)
+            if book_candidate is None: # no relevant result returned from google books api
+                continue
+
+            
+            book_data = extract_book_data(book_candidate) # transforming API response to internal schema
+            book_match = create_book(db=db, book_data=book_data) # adding the new book to the database
+        
+        resolved.append(book_match)
 
     return resolved
+

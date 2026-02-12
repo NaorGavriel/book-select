@@ -1,10 +1,7 @@
 from openai import OpenAI
-import os
-from dotenv import load_dotenv
+from app.core.config import OPENAI_API_KEY
 
-load_dotenv()
-API_KEY = os.getenv("OPENAI_API_KEY")
-client = OpenAI(api_key=API_KEY)
+client = OpenAI(api_key=OPENAI_API_KEY)
 
 def extract_books_spine_text(image_base64 : str) -> str:
     """Send bookshelf image to GPT-4o-mini and return extracted spine text as JSON."""
