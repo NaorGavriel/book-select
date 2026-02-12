@@ -1,9 +1,9 @@
 from sqlalchemy.orm import Session
 from app.models.job_result import JobResult
 from app.models.enums import Decision
+from app.dto.book_result import BookResult
 
-
-def create_job_result(db: Session, user_id: int, job_id: int, title: str, authors: list[str], decision: Decision, confidence: float, explanation: str) -> JobResult:
+def create_job_result(db: Session, book_result : BookResult, job_id : int) -> JobResult:
     """
     Create and a job result record.
 
@@ -24,13 +24,13 @@ def create_job_result(db: Session, user_id: int, job_id: int, title: str, author
         The created JobResult ORM instance.
     """
     result = JobResult(
-        user_id=user_id,
+        user_id=book_result.user_id,
         job_id=job_id,
-        title=title,
-        authors=authors,
-        decision=decision,
-        confidence=confidence,
-        explanation=explanation,
+        title=book_result.title,
+        authors=book_result.authors,
+        decision=book_result.decision,
+        confidence=book_result.confidence,
+        explanation=book_result.explanation,
     )
 
     db.add(result)

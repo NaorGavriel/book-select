@@ -9,6 +9,7 @@ from app.crud.job_results import create_job_result
 from app.services.books.resolver import resolve_books
 from app.services.ocr.ocr import extract_books_from_image
 from app.services.scoring.scoring import score_books
+from app.dto.book_result import BookResult
 
 @celery_app.task
 def process_job(job_id: int):
@@ -38,17 +39,9 @@ def process_job(job_id: int):
         resolved_books = resolve_books(db, detected_books)
         scored_books = score_books(resolved_books, job.user_id)
 
-        for r in scored_books:
-            create_job_result(
-                db=db,
-                user_id=job.user_id,
-                job_id=job.id,
-                title=r["title"],
-                authors=r["authors"],
-                decision=r["decision"],
-                confidence=r["confidence"],
-                explanation=r["explanation"],
-            )        
+        for book_result in scored_books:
+            create_job_result( db=db, book_result=book_result, job_id=job_id) 
+
 
         db.commit()
         update_job_status(db, job, status=JobStatus.completed)
