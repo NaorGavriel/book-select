@@ -8,6 +8,7 @@ from sqlalchemy.orm import Session
 from app.models.book import Book
 from app.services.books.google_books import search_google_books, extract_book_data
 from app.crud.books import create_book, check_book_cache
+from app.services.openai.openai_embedding import generate_embedding
 from app.utils.text import normalize_text
 
 def resolve_books(db: Session, detected_books: list[str]) -> list[Book]:
@@ -43,6 +44,8 @@ def resolve_books(db: Session, detected_books: list[str]) -> list[Book]:
 
             
             book_data = extract_book_data(book_candidate) # transforming API response to internal schema
+            book_embedding = generate_embedding(book_data.get("description"))
+            book_data["embedding"] = book_embedding
             book_match = create_book(db=db, book_data=book_data) # adding the new book to the database
         
         resolved.append(book_match)

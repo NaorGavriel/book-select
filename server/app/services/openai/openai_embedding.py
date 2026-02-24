@@ -11,5 +11,5 @@ def generate_embedding(description : str) -> list[float]:
 
     embedding_vector = response.data[0].embedding
     
-    token_cost = embedding_vector.usage.total_tokens # will be used later for metrics and cost tracking
+    token_cost = response.usage.total_tokens # will be used later for metrics and cost tracking
     return embedding_vector
