@@ -1,5 +1,4 @@
 from pydantic import BaseModel
-from pydantic import BaseModel
 from typing import List
 from app.models.enums import Decision
 
