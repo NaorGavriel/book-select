@@ -1,6 +1,7 @@
 from sqlalchemy.orm import Mapped, mapped_column
 from sqlalchemy import Integer, String, Float, DateTime, func, Computed, Index
 from sqlalchemy.dialects.postgresql import JSONB, TSVECTOR
+from pgvector.sqlalchemy import Vector
 
 from app.models.base import Base
 
@@ -32,6 +33,9 @@ class Book(Base):
         Computed("to_tsvector('english', search_key)", persisted=True)
     )
 
+    description: Mapped[str] = mapped_column(String, nullable=True)
+    embedding: Mapped[list[float] | None] = mapped_column(Vector(1536), nullable=True)
+    
     language: Mapped[str | None] = mapped_column(String, nullable=True)
     average_rating: Mapped[float | None] = mapped_column(Float, nullable=True)
     ratings_count: Mapped[int | None] = mapped_column(Integer, nullable=True)
