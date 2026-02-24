@@ -17,4 +17,3 @@ def add_user_book(db: Session, title: str, author: str, user_id: int) -> Book | 
     result = create_user_book(db=db, book_user_data=book_user)
 
     return result
-    # add entry to user_book table

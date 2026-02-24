@@ -8,7 +8,7 @@ services:
       - ./server/app:/code/app
       - ./server/storage:/code/storage
     ports:
-      - "8000:8000" # host:container
+      - "127.0.0.1:8000:8000" # host:container
     environment:
       DATABASE_URL: postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@db:5432/${POSTGRES_DB} # Database connection string
       REDIS_URL: ${REDIS_URL} # Redis connection URL
@@ -47,15 +47,15 @@ services:
       POSTGRES_DB: ${POSTGRES_DB}
     volumes: 
       - pgdata:/var/lib/postgresql/data # Persist database data outside the container
-      - ./server/db/init.sql:/docker-entrypoint-initdb.d/init.sql # Add vector extension
+      - ./server/db/init.sql:/docker-entrypoint-initdb.d/init.sql # add vector extension
     ports:
-      - "5432:5432"
+      - "127.0.0.1:5432:5432"
 
   # Redis message broker
   redis:
     image: redis:8
     ports:
-      - "6379:6379"
+      - "127.0.0.1:6379:6379"
       
 volumes: # Named volume used by Postgres to persist data
   pgdata:

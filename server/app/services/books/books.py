@@ -1,6 +1,7 @@
 
 from app.models.book import Book
 from app.services.books.google_books import extract_book_data, search_google_books
+from app.services.openai.openai_embedding import generate_embedding
 from app.crud.books import check_book_cache, create_book
 from app.utils.text import normalize_text
 from sqlalchemy.orm import Session
@@ -18,6 +19,9 @@ def add_book(db : Session ,title : str, author : str) -> Book | None :
             return None
 
         book_data = extract_book_data(book_candidate) # transforming API response to internal schema
+        book_embedding = generate_embedding(book_data.get("description"))
+        print(book_data.get("description"))
+        book_data["embedding"] = book_embedding
         book_match = create_book(db=db, book_data=book_data) # adding the new book to the database
         
     return book_match

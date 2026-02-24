@@ -7,7 +7,7 @@ into the internal book data format.
 import httpx
 from app.core.config import GOOGLE_BOOKS_API_KEY, MAX_RESULTS
 from app.utils.text import normalize_authors, normalize_title
-
+MAX_DESCRIPTION_LENGTH = 1000
 BASE_URL = "https://www.googleapis.com/books/v1/volumes"
 
 if not GOOGLE_BOOKS_API_KEY:
@@ -64,6 +64,8 @@ def extract_book_data(item: dict) -> dict:
     description = v.get("description")
 
     print(description)
+    if len(description) > MAX_DESCRIPTION_LENGTH: # truncating long descriptions
+        description = description[:MAX_DESCRIPTION_LENGTH]
 
     book_data = {
         "isbn_13": isbn_13,
