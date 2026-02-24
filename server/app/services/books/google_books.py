@@ -61,6 +61,9 @@ def extract_book_data(item: dict) -> dict:
     title = v.get("title")
     authors = v.get("authors", [])
     genres = v.get("categories", [])
+    description = v.get("description")
+
+    print(description)
 
     book_data = {
         "isbn_13": isbn_13,
@@ -69,6 +72,7 @@ def extract_book_data(item: dict) -> dict:
         "genres": genres,
         "normalized_title": normalize_title(title),
         "normalized_authors": normalize_authors(authors),
+        "description": description,
         "language": v.get("language"),
         "average_rating": v.get("averageRating"),
         "ratings_count": v.get("ratingsCount"),

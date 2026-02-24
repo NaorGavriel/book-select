@@ -1,4 +1,4 @@
-from app.services.ocr.openai_ocr import extract_books_spine_text
+from app.services.openai.openai_ocr import extract_books_spine_text
 from app.utils.image import prepare_image
 import json
 

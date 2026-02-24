@@ -38,6 +38,7 @@ def create_book(db: Session, book_data: dict) -> Book:
         normalized_authors=book_data.get("normalized_authors", []),
         search_key = book_data["normalized_title"] + " " + " ".join(book_data.get("normalized_authors", [])),
 
+        description=book_data.get("description"),
         language=book_data.get("language"),
         average_rating=book_data.get("average_rating"),
         ratings_count=book_data.get("ratings_count"),
