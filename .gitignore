@@ -211,3 +211,4 @@ __marimo__/
 
 *.png
 server/storage/
+.vscode/settings.json
