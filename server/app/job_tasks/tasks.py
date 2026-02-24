@@ -8,7 +8,7 @@ from app.storage.storage_factory import get_storage_backend
 from app.crud.job_results import create_job_result
 from app.services.books.resolver import resolve_books
 from app.services.ocr.ocr import extract_books_from_image
-from app.services.scoring.scoring import score_books
+from app.services.scoring.scoring import get_best_similarity, score_book
 from app.dto.book_result import BookResult
 
 @celery_app.task
@@ -36,12 +36,13 @@ def process_job(job_id: int):
         image_bytes = storage.load_image(key=job.image_path)
 
         detected_books = extract_books_from_image(image_bytes)
+
         resolved_books = resolve_books(db, detected_books)
-        scored_books = score_books(resolved_books, job.user_id)
 
-        for book_result in scored_books:
-            create_job_result( db=db, book_result=book_result, job_id=job_id) 
-
+        for candidate in resolved_books:
+            most_similar_book, similarity = get_best_similarity(db=db, candidate=candidate, user_id=job.user_id)
+            book_result = score_book(candidate=candidate, user_id=job.user_id, similarity=similarity, similar_book=most_similar_book)
+            create_job_result(db=db, book_result=book_result, job_id=job_id)
 
         db.commit()
         update_job_status(db, job, status=JobStatus.completed)
