@@ -40,13 +40,14 @@ services:
 
   # PostgreSQL database service
   db:
-    image: postgres:15
+    image: pgvector/pgvector:pg15
     environment:
       POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
       POSTGRES_DB: ${POSTGRES_DB}
-    volumes: # Persist database data outside the container
-      - pgdata:/var/lib/postgresql/data
+    volumes: 
+      - pgdata:/var/lib/postgresql/data # Persist database data outside the container
+      - ./server/db/init.sql:/docker-entrypoint-initdb.d/init.sql # Add vector extension
     ports:
       - "5432:5432"
 
