@@ -7,7 +7,22 @@ from sqlalchemy import select, literal
 
 
 def score_book(candidate: Book, user_id: int, similarity : float, similar_book : Book) -> BookResult:
+    """
+    Generate a BookResult decision based on similarity score.
 
+    Applies threshold-based logic to classify a candidate book
+    as strong_match, consider, or avoid, and provides a short
+    human-readable explanation.
+
+    Args:
+        candidate (Book): The book being evaluated.
+        user_id (int): ID of the user for whom scoring is performed.
+        similarity (float): Cosine similarity score (0.0-1.0).
+        similar_book (Book | None): Most similar previously-read book.
+
+    Returns:
+        BookResult: Structured scoring result.
+    """
     if similar_book is None:
         decision = Decision.avoid
         reasoning = "No similar books found in your reading history."
@@ -40,19 +55,31 @@ def score_book(candidate: Book, user_id: int, similarity : float, similar_book :
 
 def get_best_similarity(db: Session, candidate: Book, user_id: int) -> tuple[Book | None, float]:
     """
-    Returns the most similar previously-read book for the user,
-    excluding the same book_id as the candidate.
+    Retrieve the user's most similar previously-read book.
+
+    Uses pgvector cosine distance to compute similarity
+    between the candidate embedding and the user's read books.
+    Excludes the candidate itself.
+
+    Args:
+        db (Session): Active database session.
+        candidate (Book): Book to compare against user history.
+        user_id (int): User identifier.
+
+    Returns:
+        tuple[Book | None, float]:
+            - Most similar Book (or None if not found)
+            - Cosine similarity score (0.0 if none)
     """
 
     if candidate.embedding is None:
         return None, 0.0
     
-
-    cand_embed = list(candidate.embedding)
+    cand_embed = list(candidate.embedding) 
     distance_expr = Book.embedding.op("<=>")(cand_embed)
 
-    # convert cosine distance to cosine similarity
-    similarity_expr = literal(1.0) - distance_expr
+    
+    similarity_expr = literal(1.0) - distance_expr # convert cosine distance to cosine similarity
 
     stmt = (
         select(

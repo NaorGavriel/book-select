@@ -1,9 +1,25 @@
 from app.models.book import Book
+from app.models.user_book import UserBook
 from app.services.books.books import add_book
 from app.crud.user_book import create_user_book
 from sqlalchemy.orm import Session
 
-def add_user_book(db: Session, title: str, author: str, user_id: int) -> Book | None:
+def add_user_book(db: Session, title: str, author: str, user_id: int) -> UserBook | None:
+    """
+    Add a book to a user's reading history.
+
+    Ensures the book exists in the system (creates it if necessary),
+    then associates it with the given user.
+
+    Args:
+        db (Session): Active database session.
+        title (str): Book title.
+        author (str): Book author.
+        user_id (int): Identifier of the user.
+
+    Returns:
+        UserBook : The created UserBook object or None if the book could not be resolved.
+    """
     book = add_book(db, title, author)
 
     if book is None:

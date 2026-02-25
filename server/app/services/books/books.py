@@ -7,7 +7,18 @@ from app.utils.text import normalize_text
 from sqlalchemy.orm import Session
 
 def add_book(db : Session ,title : str, author : str) -> Book | None :
-    normalized_text = normalize_text(title + ' ' + author)
+    """
+    Retrieve or create a Book entity.
+
+    Args:
+        db (Session): Active database session.
+        title (str).
+        author (str).
+
+    Returns:
+        Book: Existing or newly created Book, or None if no external match was found.
+    """
+    normalized_text = normalize_text(title + ' ' + author) # Normalize input
 
     book_match : Book | None = check_book_cache(session=db, search_string=normalized_text)
 
@@ -20,7 +31,6 @@ def add_book(db : Session ,title : str, author : str) -> Book | None :
 
         book_data = extract_book_data(book_candidate) # transforming API response to internal schema
         book_embedding = generate_embedding(book_data.get("description"))
-        print(book_data.get("description"))
         book_data["embedding"] = book_embedding
         book_match = create_book(db=db, book_data=book_data) # adding the new book to the database
         
