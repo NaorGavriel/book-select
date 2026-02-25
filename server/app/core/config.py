@@ -3,7 +3,6 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-
 # OCR api
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 
@@ -13,3 +12,11 @@ MAX_RESULTS = os.getenv("GOOGLE_BOOKS_MAX_RESULTS")
 
 # Settings : 
 BOOK_CACHE_THRESHOLD = float(os.getenv("BOOK_CACHE_THRESHOLD"))
+
+# JWT and Authentication
+JWT_SECRET = os.getenv("JWT_SECRET")
+HASHING_ALGO = os.getenv("HASHING_ALGORITHM")
+
+TOKEN_EXPIRE_MINUTES = os.getenv("JWT_EXPIRATION_TIME_MINUTES")
+if TOKEN_EXPIRE_MINUTES is not None:
+    TOKEN_EXPIRE_MINUTES : float = float(os.getenv("JWT_EXPIRATION_TIME_MINUTES"))
