@@ -60,7 +60,6 @@ def create_access_token(data: dict):
                            "type": "access"})
 
     encoded_jwt = jwt.encode(data_to_encode, JWT_SECRET, algorithm=HASHING_ALGO)
-    print("ACCESS " + encoded_jwt)
     return encoded_jwt
 
 def create_refresh_token(data: dict):
@@ -81,7 +80,6 @@ def create_refresh_token(data: dict):
                            "type": "refresh"})
 
     encoded_jwt = jwt.encode(data_to_encode, JWT_SECRET, algorithm=HASHING_ALGO)
-    print("REFRESH " + encoded_jwt)
     return encoded_jwt    
 
 # the get_current_user method gets a token as parameter and checks if it can decode into the username, meaning if its a valid token
@@ -133,6 +131,12 @@ def refresh_access_token(refresh_token: str) -> str:
 
     return create_access_token({"sub": email})
 
+def decode_token(token : str):
+    try:
+        payload = jwt.decode(token, JWT_SECRET, algorithms=[HASHING_ALGO])
+        return payload
+    except JWTError:
+        return None
 
 def create_new_user(db : Session, email : str, password : str):
     """

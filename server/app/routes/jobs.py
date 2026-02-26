@@ -2,11 +2,12 @@ from fastapi import APIRouter,HTTPException, Depends, UploadFile, File
 from sqlalchemy.orm import Session
 from app.db import get_db
 from app.services.jobs import create_job_from_image, get_job
-
+from app.models.user import User
+from app.services.auth import get_current_user
 router = APIRouter(prefix="/jobs", tags=["jobs"])
 
 @router.post("")
-async def post_job(file: UploadFile = File(...), db: Session = Depends(get_db), user_id: int = 1):
+async def post_job(file: UploadFile = File(...), db: Session = Depends(get_db), user : User = Depends(get_current_user)):
     """
     Posts new image-processing job.
 
@@ -15,7 +16,7 @@ async def post_job(file: UploadFile = File(...), db: Session = Depends(get_db), 
     image_bytes = await file.read()
 
     job = create_job_from_image(
-        user_id=user_id,
+        user_id=user.id,
         image_bytes=image_bytes,
         filename=file.filename,
         db=db,

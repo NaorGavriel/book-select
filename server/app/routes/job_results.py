@@ -1,14 +1,15 @@
 from fastapi import APIRouter, Depends, HTTPException
 from app.schemas.job_results import JobResultItem
-
+from app.models.user import User
 from sqlalchemy.orm import Session
 from app.db import get_db
 from app.services.job_results import get_job_results
+from app.services.auth import get_current_user
 
 router = APIRouter(prefix="/results", tags=["results"])
 
 @router.get("/{job_id}", response_model=list[JobResultItem])
-def get_results(user_id: int, job_id: int, db: Session = Depends(get_db)):
+def get_results(job_id: int, db: Session = Depends(get_db), user : User = Depends(get_current_user)):
     """
     Retrieve all results for a specific job.
 
@@ -23,7 +24,7 @@ def get_results(user_id: int, job_id: int, db: Session = Depends(get_db)):
         HTTPException(404): If no results are found for the job.
     """
     try:
-        results = get_job_results(user_id, job_id, db)
+        results = get_job_results(user.id, job_id, db)
         return results
     except ValueError:
         raise HTTPException(status_code=404, detail="Results not found")
