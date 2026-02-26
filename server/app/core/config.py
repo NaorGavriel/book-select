@@ -3,6 +3,15 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
+# FASTAPI
+CORS_ORIGINS = os.getenv("CORS_ORIGINS")
+
+if CORS_ORIGINS:
+    CORS_ORIGINS = [origin.strip() for origin in CORS_ORIGINS.split(",")]
+else:
+    CORS_ORIGINS = []
+
+    
 # OCR api
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 
