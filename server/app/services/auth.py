@@ -8,7 +8,10 @@ from sqlalchemy.orm import Session
 from app.db import get_db
 from app.models.user import User
 from app.crud.users import create_user
-from app.core.config import HASHING_ALGO, JWT_SECRET, TOKEN_EXPIRE_MINUTES
+from app.core.config import HASHING_ALGO, JWT_SECRET, TOKEN_EXPIRE_MINUTES, JWT_EXPIRATION_TIME_REFRESH
+
+class InvalidRefreshToken(Exception):
+    pass
 
 if not JWT_SECRET:
     raise RuntimeError("Missing JWT_SECRET_KEY")
@@ -39,7 +42,7 @@ def authenticate_user(db : Session, email: str, password: str) -> User | None:
     return user
 
 
-def create_token(data: dict):
+def create_access_token(data: dict):
     """
     Generate a signed JWT access token.
 
@@ -53,11 +56,33 @@ def create_token(data: dict):
 
     expires_delta = timedelta(minutes=TOKEN_EXPIRE_MINUTES)
     expire = datetime.now(timezone.utc) + expires_delta
-    data_to_encode.update({"exp":expire})
+    data_to_encode.update({"exp":expire,
+                           "type": "access"})
 
     encoded_jwt = jwt.encode(data_to_encode, JWT_SECRET, algorithm=HASHING_ALGO)
-    print(encoded_jwt)
+    print("ACCESS " + encoded_jwt)
     return encoded_jwt
+
+def create_refresh_token(data: dict):
+    """
+    Generate a signed JWT refresh token.
+
+    Args:
+        data (dict): Payload to encode.
+
+    Returns:
+        str: Encoded JWT.
+    """
+    data_to_encode = data.copy()
+
+    expires_delta = timedelta(minutes=JWT_EXPIRATION_TIME_REFRESH)
+    expire = datetime.now(timezone.utc) + expires_delta
+    data_to_encode.update({"exp":expire,
+                           "type": "refresh"})
+
+    encoded_jwt = jwt.encode(data_to_encode, JWT_SECRET, algorithm=HASHING_ALGO)
+    print("REFRESH " + encoded_jwt)
+    return encoded_jwt    
 
 # the get_current_user method gets a token as parameter and checks if it can decode into the username, meaning if its a valid token
 def get_current_user(token : str = Depends(oauth2_bearer), db: Session = Depends(get_db)):
@@ -77,7 +102,8 @@ def get_current_user(token : str = Depends(oauth2_bearer), db: Session = Depends
         # Decode and validate token
         payload = jwt.decode(token, JWT_SECRET, algorithms=[HASHING_ALGO])
         email: str = payload.get("sub")
-        if email == None:
+        token_type : str = payload.get("type")
+        if email == None or token_type != "access":
             raise cred_excep
     except JWTError:
         raise cred_excep
@@ -88,6 +114,24 @@ def get_current_user(token : str = Depends(oauth2_bearer), db: Session = Depends
         raise cred_excep
     
     return user
+
+def refresh_access_token(refresh_token: str) -> str:
+    if not refresh_token:
+        raise InvalidRefreshToken("Missing refresh token")
+
+    try:
+        payload = jwt.decode(refresh_token, JWT_SECRET, algorithms=[HASHING_ALGO])
+    except JWTError:
+        raise InvalidRefreshToken("Invalid refresh token")
+
+    if payload.get("type") != "refresh":
+        raise InvalidRefreshToken("Invalid token type")
+
+    email = payload.get("sub")
+    if not email:
+        raise InvalidRefreshToken("Invalid token payload")
+
+    return create_access_token({"sub": email})
 
 
 def create_new_user(db : Session, email : str, password : str):
