@@ -1,15 +1,16 @@
 import HomeButton from "../components/HomeButton";
-
+import UploadImage from "../components/ImageUpload";
 /**
  * UploadPage
- * ----------
- * Placeholder for image upload feature.
+ * --------------
+ * Allows user to upload a picture of a books.
  */
 export default function UploadPage() {
   return (
     <div>
       <HomeButton />
-      <h2>Upload Picture</h2>
+      <UploadImage/>
+      
     </div>
   );
 }
