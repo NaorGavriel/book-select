@@ -39,13 +39,14 @@ function UploadImage() {
             const formData = new FormData();
             formData.append("file", image);
 
-            await api.post("/jobs", formData, {
+            const response = await api.post("/jobs", formData, {
             headers: {
                 "Content-Type": "multipart/form-data",
             },
             });
-
-            navigate("/results");
+            
+            const { job_id } = response.data; // extracting job_id from response
+            navigate(`/results/${job_id}`);
         } catch {
             console.error("Upload failed");
         }

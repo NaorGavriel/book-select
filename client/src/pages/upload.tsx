@@ -10,7 +10,6 @@ export default function UploadPage() {
     <div>
       <HomeButton />
       <UploadImage/>
-      
     </div>
   );
 }

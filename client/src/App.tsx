@@ -26,7 +26,7 @@ function AppContent() {
       {/* Protected routes */}
       <Route element={<RequireAuth />}>
         <Route path="/home" element={<HomePage />} />
-        <Route path="/results" element={<ResultsPage />} />
+        <Route path="/results/:jobId" element={<ResultsPage />} />
         <Route path="/recommendations" element={<RecommendationsPage />} />
         <Route path="/reading-history" element={<ReadingHistoryPage />} />
         <Route path="/upload" element={<UploadPage />} />
