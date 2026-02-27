@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import api from "../api/axios";
 import { useAuth } from "../auth/AuthContext";
 import { useNavigate } from "react-router-dom";
-
+import LandingPageButton from "../components/LandingPageButton";
   /**
   * LoginPage
   * ---------
@@ -48,6 +48,7 @@ export default function LoginPage() {
 
   return (
     <div>
+      <LandingPageButton/>
       <h2>Login</h2>
 
       <input

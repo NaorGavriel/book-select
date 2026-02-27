@@ -9,6 +9,7 @@ import ResultsPage from "./pages/Results";
 import RecommendationsPage from "./pages/Recommendations";
 import ReadingHistoryPage from "./pages/ReadingHistory";
 import UploadPage from "./pages/Upload";
+import LandingPage from "./pages/LandingPage";
 
 function AppContent() {
   const loading = usePersistentLogin();
@@ -20,6 +21,7 @@ function AppContent() {
   return (
     <Routes>
       {/* Public routes */}
+      <Route path="/" element={<LandingPage />} />
       <Route path="/login" element={<LoginPage />} />
       <Route path="/register" element={<RegisterPage />} />
 

@@ -1,6 +1,7 @@
 import { useState } from "react";
 import api from "../api/axios";
 import { useNavigate } from "react-router";
+import LandingPageButton from "../components/LandingPageButton";
 
 /**
  * RegisterPage
@@ -36,6 +37,7 @@ export default function RegisterPage() {
 
   return (
     <div>
+      <LandingPageButton/>
       <h2>Register</h2>
 
       <input

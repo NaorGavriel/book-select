@@ -23,7 +23,7 @@ export default function LogoutButton() {
     } finally {
       // Clear access token from memory
       setAccessToken(null);
-      navigate("/login");
+      navigate("/");
     }
   };
 
