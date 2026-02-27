@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-
+import LogoutButton from "../components/LogoutButton";
 /**
  * HomePage
  * --------
@@ -17,6 +17,7 @@ export default function HomePage() {
 
   return (
     <div>
+      <LogoutButton/>
       <h2>Home</h2>
 
       <button onClick={() => navigate("/upload")}>

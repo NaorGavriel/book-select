@@ -44,6 +44,10 @@ def login(response: Response, form_data: OAuth2PasswordRequestForm = Depends(), 
     return {"access_token": access_token, "token_type": "bearer"}
 
 
+@router.post("/logout")
+def logout(response: Response):
+    response.delete_cookie("refresh_token")
+
 @router.post("/refresh")
 def refresh(refresh_token: str = Cookie(None)):
     try:
