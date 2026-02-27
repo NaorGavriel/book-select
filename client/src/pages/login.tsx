@@ -1,6 +1,7 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import api from "../api/axios";
 import { useAuth } from "../auth/AuthContext";
+import { useNavigate } from "react-router-dom";
 
   /**
   * LoginPage
@@ -10,10 +11,17 @@ import { useAuth } from "../auth/AuthContext";
   * refresh token stored as cookie
   */
 export default function LoginPage() {
-  const { setAccessToken } = useAuth();
+  const { accessToken, setAccessToken } = useAuth();
+  const navigate = useNavigate();
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+
+  useEffect(() => {
+    if (accessToken) {
+      navigate("/home", { replace: true });
+    }
+  }, [accessToken]);
 
   const handleLogin = async () => {
     try {
@@ -31,7 +39,7 @@ export default function LoginPage() {
 
       // store token
       setAccessToken(access_token);
-
+      
       console.log("Logged in!");
     } catch (err) {
       console.error("Login failed");
