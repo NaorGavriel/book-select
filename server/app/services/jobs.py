@@ -28,15 +28,15 @@ def create_job_from_image(user_id: int, image_bytes: bytes,filename: str,db: Ses
     )
 
     # enqueing job processing task
-    process_job.delay(job.id)
+    process_job.delay(job.id, user_id)
 
     return job
 
-def get_job(job_id: int, db: Session) -> Job:
+def get_job(user_id: int ,job_id: int, db: Session) -> Job:
     """
     Retrieve a job by job_id or raise ValueError if not found.
     """
-    job = get_job_by_id(db, job_id)
+    job = get_job_by_id(db, job_id, user_id)
     if job is None:
         raise ValueError("Job not found")
     return job

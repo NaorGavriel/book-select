@@ -28,12 +28,12 @@ async def post_job(file: UploadFile = File(...), db: Session = Depends(get_db), 
     }
 
 @router.get("/{job_id}")
-def get_job_status(job_id: int, db: Session = Depends(get_db)):
+def get_job_status(job_id: int, db: Session = Depends(get_db), user : User = Depends(get_current_user)):
     """
     Retrieve the current status of a job.
     """
     try:
-        job = get_job(job_id, db)
+        job = get_job(user_id=user.id, job_id=job_id, db=db)
     except ValueError:
         raise HTTPException(status_code=404, detail="Job not found")
 
