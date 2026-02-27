@@ -54,7 +54,7 @@ def create_access_token(data: dict):
     """
     data_to_encode = data.copy()
 
-    expires_delta = timedelta(minutes=TOKEN_EXPIRE_MINUTES)
+    expires_delta = timedelta(seconds=15)
     expire = datetime.now(timezone.utc) + expires_delta
     data_to_encode.update({"exp":expire,
                            "type": "access"})
@@ -74,7 +74,7 @@ def create_refresh_token(data: dict):
     """
     data_to_encode = data.copy()
 
-    expires_delta = timedelta(minutes=JWT_EXPIRATION_TIME_REFRESH)
+    expires_delta = timedelta(days=JWT_EXPIRATION_TIME_REFRESH)
     expire = datetime.now(timezone.utc) + expires_delta
     data_to_encode.update({"exp":expire,
                            "type": "refresh"})
