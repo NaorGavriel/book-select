@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import useAxios from "../api/useAxios";
-import JobStatusPoller from "../components/JobStatusPoller";
-import ResultCard from "../components/ResultCard";
+import JobStatusPoller from "../features/recommendations/JobStatusPoller";
+import ResultCard from "../features/recommendations/components/ResultCard";
 import HomeButton from "../components/HomeButton";
 import type { JobResult } from "../types/result";
 /**

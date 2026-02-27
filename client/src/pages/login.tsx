@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import api from "../api/axios";
-import { useAuth } from "../auth/AuthContext";
+import { useAuth } from "../features/authentication/AuthContext";
 import { useNavigate } from "react-router-dom";
 import LandingPageButton from "../components/LandingPageButton";
   /**

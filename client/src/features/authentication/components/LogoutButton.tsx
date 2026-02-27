@@ -1,5 +1,5 @@
-import useAxios from "../api/useAxios";
-import { useAuth } from "../auth/AuthContext";
+import useAxios from "../../../api/useAxios";
+import { useAuth } from "../AuthContext";
 import { useNavigate } from "react-router-dom";
 
 /**

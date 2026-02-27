@@ -1,5 +1,5 @@
 import HomeButton from "../components/HomeButton";
-import UploadImage from "../components/ImageUpload";
+import UploadImage from "../features/image__upload/ImageUpload";
 /**
  * UploadPage
  * --------------

@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import useAxios from "../api/useAxios";
 import HomeButton from "../components/HomeButton";
-import AddBookModal from "../components/AddBookModal";
+import AddBookModal from "../features/recommendations/AddBookModal";
 import BookCard from "../components/BookCard";
 import type { UserBook } from "../types/book";
 

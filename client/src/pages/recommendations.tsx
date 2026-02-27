@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import useAxios from "../api/useAxios";
-import ResultCard from "../components/ResultCard";
+import ResultCard from "../features/recommendations/components/ResultCard";
 import HomeButton from "../components/HomeButton";
 import type { JobResult } from "../types/result";
 

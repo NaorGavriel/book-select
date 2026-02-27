@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
-import api from "../api/axios";
-import { useAuth } from "./AuthContext";
+import api from "../../../api/axios";
+import { useAuth } from "../AuthContext";
 
 /**
  * Runs once when the app loads.

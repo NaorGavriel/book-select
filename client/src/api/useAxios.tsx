@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import api from "./axios";
-import { useAuth } from "../auth/AuthContext";
+import { useAuth } from "../features/authentication/AuthContext";
 
 export default function useAxios() {
   const { accessToken, setAccessToken } = useAuth();

@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import LogoutButton from "../components/LogoutButton";
+import LogoutButton from "../features/authentication/components/LogoutButton";
 import LandingPageButton from "../components/LandingPageButton";
 /**
  * HomePage
