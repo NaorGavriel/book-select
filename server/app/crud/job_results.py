@@ -40,9 +40,6 @@ def get_results(db: Session,user_id: int, job_id: int):
     """
     Retrieve all results for a specific job and user.
 
-    This function performs a filtered read and does not apply
-    ordering, pagination, or authorization checks.
-
     Args:
         db: Active SQLAlchemy session.
         user_id: Owner of the job.
@@ -52,4 +49,18 @@ def get_results(db: Session,user_id: int, job_id: int):
         A list of JobResult records matching the job and user.
     """
     results = db.query(JobResult).filter(JobResult.job_id == job_id, JobResult.user_id == user_id).all()
+    return results
+
+def get_all_results(db: Session,user_id: int):
+    """
+    Retrieve all results for a specific user.
+
+    Args:
+        db: Active SQLAlchemy session.
+        user_id: Owner of the job.
+
+    Returns:
+        A list of JobResult records matching the user.
+    """
+    results = db.query(JobResult).filter(JobResult.user_id == user_id).all()
     return results
