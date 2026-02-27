@@ -4,21 +4,13 @@ import useAxios from "../api/useAxios";
 import JobStatusPoller from "../components/JobStatusPoller";
 import ResultCard from "../components/ResultCard";
 import HomeButton from "../components/HomeButton";
+import type { JobResult } from "../types/result";
 /**
  * ResultsPage
  * -----------
- * Flow:
- * - Poll job status
- * - When completed → fetch results
- * - Display results as cards
+ * - Poll job status, fetches results when job is completed and displays each book result as card
  */
-type JobResult = {
-  title: string;
-  authors: string[];
-  decision: string;
-  confidence: number;
-  explanation: string;
-};
+
 
 export default function ResultsPage() {
   const { jobId } = useParams();

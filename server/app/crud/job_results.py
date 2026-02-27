@@ -62,5 +62,5 @@ def get_all_results(db: Session,user_id: int):
     Returns:
         A list of JobResult records matching the user.
     """
-    results = db.query(JobResult).filter(JobResult.user_id == user_id).all()
+    results = db.query(JobResult).filter(JobResult.user_id == user_id).order_by(JobResult.created_at.desc()).all()
     return results

@@ -1,5 +1,6 @@
 from sqlalchemy.orm import Session
 from app.crud.job_results import get_results, get_all_results
+from app.models.job_result import JobResult
 
 def get_job_results(user_id:int ,job_id: int, db: Session):
     """
@@ -21,7 +22,7 @@ def get_job_results(user_id:int ,job_id: int, db: Session):
             raise ValueError
     return results
 
-def get_all_results_for_user(user_id:int, db: Session):
+def get_all_results_for_user(user_id:int, db: Session) -> list[JobResult]:
     """
     Retrieve all results for a specific user.
 
