@@ -2,11 +2,10 @@ import { useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import useAxios from "../api/useAxios";
 import JobStatusPoller from "../features/recommendations/JobStatusPoller";
-import ResultCard from "../features/recommendations/components/ResultCard";
 import type { JobResult } from "../types/result";
 import ResultsList from "../features/recommendations/components/ResultsList";
 import ResultsLoader from "../features/recommendations/components/ResultsLoader";
-
+import ResultsHeader from "../features/recommendations/components/ResultsHeader";
 /**
  * ResultsPage
  * -----------
@@ -34,7 +33,7 @@ export default function ResultsPage() {
   return (
     <div className="min-h-[calc(100vh-140px)] bg-linear-to-b from-neutral-100 to-slate-100 px-6 py-16">
       <div className="max-w-4xl mx-auto">
-
+        <ResultsHeader/>
         {/* LOADING STATE */}
         {!results && <ResultsLoader/>}
 
