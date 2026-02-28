@@ -5,7 +5,7 @@ export default function LoginButton() {
     return (
             <button
                 onClick={() => navigate("/login")}
-                className="px-8 py-3 text-base font-medium rounded-2xl 
+                className="px-8 py-3 text-base font-medium rounded-full
                         bg-amber-300 text-black
                         hover:bg-violet-600 hover:text-white transition"
             >
