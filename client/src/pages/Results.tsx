@@ -3,15 +3,15 @@ import { useParams, useNavigate } from "react-router-dom";
 import useAxios from "../api/useAxios";
 import JobStatusPoller from "../features/recommendations/JobStatusPoller";
 import ResultCard from "../features/recommendations/components/ResultCard";
-import HomeButton from "../components/HomeButton";
 import type { JobResult } from "../types/result";
+import ResultsList from "../features/recommendations/components/ResultsList";
+import ResultsLoader from "../features/recommendations/components/ResultsLoader";
+
 /**
  * ResultsPage
  * -----------
  * - Poll job status, fetches results when job is completed and displays each book result as card
  */
-
-
 export default function ResultsPage() {
   const { jobId } = useParams();
   const navigate = useNavigate();
@@ -32,41 +32,31 @@ export default function ResultsPage() {
   };
 
   return (
-    <div>
-      <h2>Results</h2>
-      
-      {/* Show status while waiting */}
-      {!results && <p>Status: {status}</p>}
+    <div className="min-h-[calc(100vh-140px)] bg-linear-to-b from-neutral-100 to-slate-100 px-6 py-16">
+      <div className="max-w-4xl mx-auto">
 
-      {/* Poller runs only until completed */}
-      {!results && (
-        <JobStatusPoller
-          jobId={jobId}
-          intervalMs={3000}
-          maxAttempts={4}
-          onUpdate={setStatus}
-          onCompleted={() => {
-            console.log("Job completed");
-            fetchResults();
-          }}
-          onFailed={() => {
-            console.error("Job failed");
-            navigate("/home");
-          }}
-        />
-      )}
+        {/* LOADING STATE */}
+        {!results && <ResultsLoader/>}
 
-      {/* Render result cards */}
-      <div>
-        <HomeButton/>
+        {/* POLLER */}
+        {!results && (
+          <JobStatusPoller
+            jobId={jobId}
+            intervalMs={3000}
+            maxAttempts={10}
+            onUpdate={setStatus}
+            onCompleted={() => {
+              fetchResults();
+            }}
+            onFailed={() => {
+              navigate("/home");
+            }}
+          />
+        )}
+
+        {/* RESULTS */}
+        {results && <ResultsList results={results} />}
       </div>
-      {results && (
-        <div>
-          {results.map((result, index) => (
-            <ResultCard key={index} result={result} />
-          ))}
-        </div>
-      )}
     </div>
   );
 }
