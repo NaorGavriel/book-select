@@ -57,54 +57,72 @@ export default function AddBookModal({
     };
 
     return (
-        <div className="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center">
-        <div className="bg-white rounded-lg p-6 w-full max-w-md shadow-lg">
-            <h3 className="text-xl font-bold mb-4">Add New Book</h3>
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/30 backdrop-blur-sm px-4">
+      <div className="w-full max-w-md rounded-2xl bg-white shadow-xl border border-neutral-200 p-8 animate-fade-in">
 
-            <div className="mb-4">
-            <label className="block mb-1 text-sm font-medium">
-                Title
-            </label>
-            <input
-                type="text"
-                value={title}
-                onChange={(e) => setTitle(e.target.value)}
-                className="w-full border rounded px-3 py-2"
-                placeholder="Enter book title"
-            />
-            </div>
-
-            <div className="mb-4">
-            <label className="block mb-1 text-sm font-medium">
-                Author
-            </label>
-            <input
-                type="text"
-                value={author}
-                onChange={(e) => setAuthor(e.target.value)}
-                className="w-full border rounded px-3 py-2"
-                placeholder="Enter author name"
-            />
-            </div>
-
-            <div className="flex justify-end gap-2">
-            <button
-                onClick={onClose}
-                className="px-4 py-2 rounded border"
-                disabled={submitting}
-            >
-                Cancel
-            </button>
-
-            <button
-                onClick={handleSubmit}
-                className="bg-blue-600 text-white px-4 py-2 rounded"
-                disabled={submitting}
-            >
-                {submitting ? "Adding..." : "Add"}
-            </button>
-            </div>
+        {/* Header */}
+        <div className="mb-6">
+          <h3 className="text-2xl font-semibold text-neutral-800">
+            Add New Book
+          </h3>
+          <p className="text-sm text-neutral-500 mt-1">
+            Fill in the book's title and author's name.
+          </p>
         </div>
+
+        {/* Title Field */}
+        <div className="mb-5">
+          <label className="block text-sm font-medium text-neutral-700 mb-2">
+            Title
+          </label>
+          <input
+            type="text"
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+            placeholder="e.g. Atomic Habits"
+            className="w-full rounded-lg border border-neutral-300 bg-neutral-50 px-4 py-2.5 
+                       focus:outline-none focus:ring-2 focus:ring-neutral-400 
+                       focus:border-neutral-400 transition"
+          />
         </div>
-    );
+
+        {/* Author Field */}
+        <div className="mb-8">
+          <label className="block text-sm font-medium text-neutral-700 mb-2">
+            Author
+          </label>
+          <input
+            type="text"
+            value={author}
+            onChange={(e) => setAuthor(e.target.value)}
+            placeholder="e.g. James Clear"
+            className="w-full rounded-lg border border-neutral-300 bg-neutral-50 px-4 py-2.5 
+                       focus:outline-none focus:ring-2 focus:ring-neutral-400 
+                       focus:border-neutral-400 transition"
+          />
+        </div>
+
+        {/* Actions */}
+        <div className="flex justify-end gap-3">
+          <button
+            onClick={onClose}
+            disabled={submitting}
+            className="rounded-lg px-4 py-2 text-sm font-medium text-neutral-600 
+                       hover:bg-neutral-100 transition disabled:opacity-50"
+          >
+            Cancel
+          </button>
+
+          <button
+            onClick={handleSubmit}
+            disabled={submitting}
+            className="rounded-lg bg-neutral-800 text-white px-5 py-2 text-sm font-medium 
+                       hover:bg-neutral-700 transition disabled:opacity-50"
+          >
+            {submitting ? "Adding..." : "Add Book"}
+          </button>
+        </div>
+      </div>
+    </div>
+  );
 }

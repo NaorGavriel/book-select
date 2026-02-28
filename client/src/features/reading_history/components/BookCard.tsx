@@ -6,7 +6,7 @@ interface BookCardProps {
 
 export default function BookCard({ book }: BookCardProps) {
   return (
-    <div className="group bg-white border border-neutral-200 rounded-2xl p-8
+    <div className="group bg-white border border-indigo-300 rounded-2xl p-8
                     transition-all duration-200 hover:shadow-lg hover:-translate-y-1">
 
       {/* Title */}
