@@ -12,6 +12,7 @@ import UploadPage from "./pages/Upload";
 import LandingPage from "./pages/LandingPage";
 import Layout from "./components/ui/Layout";
 import LoginButton from "./features/landing_content/components/LoginButton";
+import LandingPageButton from "./components/LandingPageButton";
 
 function AppContent() {
   const loading = usePersistentLogin();
@@ -29,7 +30,7 @@ function AppContent() {
       </Route>
 
       {/* Public Auth Pages */}
-      <Route element={<Layout />}>
+      <Route element={<Layout headerRight={<LandingPageButton />}/>}>
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />} />
       </Route>

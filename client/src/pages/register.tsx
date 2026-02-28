@@ -1,63 +1,25 @@
-import { useState } from "react";
-import api from "../api/axios";
-import { useNavigate } from "react-router";
-import LandingPageButton from "../components/LandingPageButton";
+import AuthHeader from "../features/authentication/components/ui/AuthHeader";
+import AuthCard from "../features/authentication/components/ui/AuthCard";
+import RegisterForm from "../features/authentication/components/RegisterForm";
 
-/**
- * RegisterPage
- * ------------
- * Creates a new user account.
- * - Sends email and password to POST /register
- * - On success, redirects user to /login
- * - On failure, displays backend error message
- */
 export default function RegisterPage() {
-  const navigate = useNavigate();
-
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
-
-  const handleRegister = async () => {
-    setError("");
-
-    try {
-      await api.post("/register", {
-        email,
-        password,
-      });
-
-      // After successful registration routing to login
-      navigate("/login");
-
-    } catch (err: any) {
-      setError(err.response?.data?.detail || "Registration failed");
-    }
-  };
-
   return (
-    <div>
-      <LandingPageButton/>
-      <h2>Register</h2>
+    <div className="relative min-h-[calc(100vh-140px)] flex items-center justify-center px-6">
 
-      <input
-        placeholder="Email"
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
-      />
+      {/* Background Gradient */}
+      <div className="absolute inset-0 -z-10 bg-gradient-to-b from-white via-stone-50 to-emerald-50" />
 
-      <input
-        type="password"
-        placeholder="Password"
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
-      />
+      <div className="w-full max-w-md">
+        <AuthHeader
+          title="Create your account"
+          subtitle="Start your personalized reading journey."
+        />
 
-      <button onClick={handleRegister}>
-        Register
-      </button>
+        <AuthCard>
+          <RegisterForm />
+        </AuthCard>
+      </div>
 
-      {error && <p style={{ color: "red" }}>{error}</p>}
     </div>
   );
 }

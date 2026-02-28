@@ -1,8 +1,6 @@
-import { useState, useEffect } from "react";
-import api from "../api/axios";
-import { useAuth } from "../features/authentication/AuthContext";
-import { useNavigate } from "react-router-dom";
-import LandingPageButton from "../components/LandingPageButton";
+import AuthCard from "../features/authentication/components/ui/AuthCard";
+import LoginForm from "../features/authentication/components/LoginForm";
+import AuthHeader from "../features/authentication/components/ui/AuthHeader";
   /**
   * LoginPage
   * ---------
@@ -11,60 +9,23 @@ import LandingPageButton from "../components/LandingPageButton";
   * refresh token stored as cookie
   */
 export default function LoginPage() {
-  const { accessToken, setAccessToken } = useAuth();
-  const navigate = useNavigate();
-
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-
-  useEffect(() => {
-    if (accessToken) {
-      navigate("/home", { replace: true });
-    }
-  }, [accessToken]);
-
-  const handleLogin = async () => {
-    try {
-      const formData = new URLSearchParams();
-      formData.append("username", email);
-      formData.append("password", password);
-
-      const response = await api.post(
-        "/token",
-        formData,
-        { headers: { "Content-Type": "application/x-www-form-urlencoded", }
-        ,});
-
-      const { access_token } = response.data;
-
-      // store token
-      setAccessToken(access_token);
-      
-      console.log("Logged in!");
-    } catch (err) {
-      console.error("Login failed");
-    }
-  };
-
   return (
-    <div>
-      <LandingPageButton/>
-      <h2>Login</h2>
+    <div className="relative min-h-[calc(100vh-140px)] flex items-center justify-center px-6">
 
-      <input
-        placeholder="email"
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
-      />
+      {/* Background Gradient */}
+      <div className="absolute inset-0 -z-10 bg-gradient-to-b from-white via-violet-50 to-amber-100" />
 
-      <input
-        placeholder="password"
-        type="password"
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
-      />
+      <div className="w-full max-w-md">
+        <AuthHeader
+          title="Welcome back"
+          subtitle=""
+        />
 
-      <button onClick={handleLogin}>Login</button>
+        <AuthCard>
+          <LoginForm />
+        </AuthCard>
+      </div>
+
     </div>
-  );
+  );  
 }
