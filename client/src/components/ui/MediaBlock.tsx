@@ -31,7 +31,7 @@ function MediaBlock({
       <img
         src={src}
         alt={alt}
-        className="relative z-10 max-h-[380px] w-auto"
+        className="relative z-10 max-h-95 w-auto"
       />
     </div>
   );

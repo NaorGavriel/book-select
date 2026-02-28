@@ -13,7 +13,7 @@ export default function LoginPage() {
     <div className="relative min-h-[calc(100vh-140px)] flex items-center justify-center px-6">
 
       {/* Background Gradient */}
-      <div className="absolute inset-0 -z-10 bg-gradient-to-b from-white via-violet-50 to-amber-100" />
+      <div className="absolute inset-0 -z-10 bg-linear-to-b from-white via-violet-50 to-amber-100" />
 
       <div className="w-full max-w-md">
         <AuthHeader

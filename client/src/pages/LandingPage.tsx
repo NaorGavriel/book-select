@@ -1,4 +1,3 @@
-import { useNavigate } from "react-router-dom";
 import LandingPageSections from "../features/landing_content/components/LandingPageSections";
 import RegisterButton from "../features/landing_content/components/RegisterButton";
 
@@ -8,9 +7,9 @@ export default function LandingPage() {
     <div className="relative min-h-screen  text-neutral-900 overflow-hidden">
       
       {/* Background Layers */}
-      <div className="absolute inset-0 -z-20 bg-gradient-to-b from-amber-100/50 via-stone-50 to-stone-50" />
-      <div className="absolute top-[-150px] left-[-150px] w-[600px] h-[600px] bg-violet-300/20 rounded-full blur-3xl -z-10" />
-      <div className="absolute bottom-[-200px] right-[-200px] w-[700px] h-[700px] bg-rose-200/30 rounded-full blur-3xl -z-10" />
+      <div className="absolute inset-0 -z-20 bg-linear-to-b from-amber-100/50 via-stone-50 to-stone-50" />
+      <div className="absolute -top-37.5 -left-37.5 w-150 h-150 bg-violet-300/20 rounded-full blur-3xl -z-10" />
+      <div className="absolute -bottom-50 -right-50 w-175 h-175 bg-rose-200/30 rounded-full blur-3xl -z-10" />
 
       {/* Hero */}
       <section className="px-6 pt-16 pb-10 max-w-4xl mx-auto text-center">

@@ -7,7 +7,7 @@ export default function RegisterPage() {
     <div className="relative min-h-[calc(100vh-140px)] flex items-center justify-center px-6">
 
       {/* Background Gradient */}
-      <div className="absolute inset-0 -z-10 bg-gradient-to-b from-white via-stone-50 to-emerald-50" />
+      <div className="absolute inset-0 -z-10 bg-linear-to-b from-white via-stone-50 to-emerald-50" />
 
       <div className="w-full max-w-md">
         <AuthHeader
