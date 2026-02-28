@@ -15,31 +15,30 @@ type Props = {
 
 export default function ResultCard({ result }: Props) {
   return (
-    <div style={styles.card}>
-      <h3>{result.title}</h3>
+    <div className="bg-white border border-neutral-200 rounded-2xl shadow-md p-6 transition hover:shadow-lg">
 
-      <p>
-        <strong>Authors:</strong> {result.authors.join(", ")}
+      <h3 className="text-xl font-semibold text-neutral-800 mb-3">
+        {result.title}
+      </h3>
+
+      <p className="text-sm text-neutral-600 mb-2">
+        <span className="font-medium text-neutral-700">Authors:</span>{" "}
+        {result.authors.join(", ")}
       </p>
 
-      <p>
-        <strong>Decision:</strong> {result.decision}
+      <p className="text-sm text-neutral-600 mb-2">
+        <span className="font-medium text-neutral-700">Decision:</span>{" "}
+        {result.decision}
       </p>
 
-      <p>
-        <strong>Confidence:</strong> {result.confidence}
+      <p className="text-sm text-neutral-600 mb-4">
+        <span className="font-medium text-neutral-700">Confidence:</span>{" "}
+        {(result.confidence * 100).toFixed(1)}%
       </p>
 
-      <p>{result.explanation}</p>
+      <p className="text-sm text-neutral-700 leading-relaxed">
+        {result.explanation}
+      </p>
     </div>
   );
 }
-
-const styles = {
-  card: {
-    border: "1px solid #ccc",
-    borderRadius: "8px",
-    padding: "12px",
-    marginBottom: "12px",
-  } as React.CSSProperties,
-};
