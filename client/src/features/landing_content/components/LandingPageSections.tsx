@@ -1,18 +1,25 @@
 import InfoSection from "../../../components/ui/InfoSection"
+import  BookShelfSvg from "../../../assets/undraw_bookshelves_vhu6.svg"
+import NewsFeedSvg from "../../../assets/undraw_newsfeed_8ms9.svg"
+import UploadImageSvg from "../../../assets/undraw_upload-image_tpmp.svg"
+import ViewResultsSvg from "../../../assets/undraw_choose_5kz4.svg"
+import MediaBlock from "../../../components/ui/MediaBlock"
 
 export default function LandingPageSections() {
     return (
         <section>
-            
             <InfoSection
             title="Add Your Favorite Books"
             description="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
             background="bg-neutral-800"
             isDark
             media={
-                <div className="w-full h-full bg-neutral-800 flex items-center justify-center shadow-sm">
-                Account Preview
-                </div>
+                <MediaBlock
+                src={NewsFeedSvg}
+                alt="Upload books illustration"
+                glowColor="bg-amber-100/25"
+                align="center"
+                />
             }
             />
             
@@ -22,9 +29,12 @@ export default function LandingPageSections() {
             background="bg-gradient-to-b from-white via-stone-50 to-amber-50"
             reverse
             media={
-                <div className="w-full h-full bg-white flex items-center justify-center text-neutral-200">
-                Add Book Preview
-                </div>
+                <MediaBlock
+                src={UploadImageSvg}
+                alt="Upload books illustration"
+                glowColor="bg-amber-100/25"
+                align="center"
+                />
             }
             />
 
@@ -34,9 +44,12 @@ export default function LandingPageSections() {
             background="bg-neutral-800"
             isDark
             media={
-                <div className="w-full h-full bg-neutral-800 flex items-center justify-center shadow-sm">
-                Upload Preview
-                </div>
+                <MediaBlock
+                src={ViewResultsSvg}
+                alt="Upload books illustration"
+                glowColor="bg-amber-100/25"
+                align="center"
+                />
             }
             />
         </section>

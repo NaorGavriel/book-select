@@ -18,9 +18,9 @@ export default function InfoSection({
   reverse = false,
 }: InfoSectionProps) {
   return (
-    <section className={`w-full ${background} py-32`}>
+    <section className={`w-full ${background} py-16`}>
       <div
-        className={`max-w-6xl mx-auto px-6 flex flex-col lg:flex-row ${
+        className={`max-w-6xl mx-auto px-6 flex flex-col lg:flex-row items-center ${
           reverse ? "lg:flex-row-reverse" : ""
         }`}
       >
@@ -44,7 +44,7 @@ export default function InfoSection({
         </div>
 
         {/* Media */}
-        <div className="lg:w-1/2 mt-12 lg:mt-0 min-h-[350px] lg:min-h-[500px]">
+        <div className="lg:w-1/2 mt-12 lg:mt-0 flex justify-center">
           {media}
         </div>
       </div>
