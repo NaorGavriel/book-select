@@ -1,5 +1,4 @@
-import HomeButton from "../components/HomeButton";
-import UploadImage from "../features/image__upload/ImageUpload";
+import ImageUpload from "../features/image__upload/ImageUpload";
 /**
  * UploadPage
  * --------------
@@ -7,9 +6,10 @@ import UploadImage from "../features/image__upload/ImageUpload";
  */
 export default function UploadPage() {
   return (
-    <div>
-      <HomeButton />
-      <UploadImage/>
+    <div className="min-h-[calc(100vh-140px)] bg-linear-to-b from-neutral-100 to-slate-100 px-6 py-16">
+      <div className="max-w-2xl mx-auto">
+        <ImageUpload />
+      </div>
     </div>
   );
 }

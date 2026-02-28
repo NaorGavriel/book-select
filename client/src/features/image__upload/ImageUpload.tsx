@@ -1,20 +1,22 @@
 import {useState} from 'react'
 import useAxios from '../../api/useAxios';
 import { useNavigate } from 'react-router';
-
+import ImageUploadHeader from './components/ImageUploadHeader';
 /**
- * UploadImage
+ * ImageUpload
  * -----------
  * Allows the user to upload an image of a bookshelf and create a processing job.
  *
  * - File is sent to POST /jobs
  * - On success will navigate to /results
  */
-function UploadImage() {
+function ImageUpload() {
     const api = useAxios();
     const navigate = useNavigate();
 
     const [image, setImage] = useState<File | null>(null); // Selected image file (null until user chooses a file)
+    const [preview, setPreview] = useState<string | null>(null);
+    const [uploading, setUploading] = useState(false);
 
     /**
      * Handles file selection from input.
@@ -24,6 +26,7 @@ function UploadImage() {
         const imageFile = event.target.files?.[0];
         if (imageFile) {
             setImage(imageFile);
+            setPreview(URL.createObjectURL(imageFile));
         }
     }
 
@@ -36,6 +39,7 @@ function UploadImage() {
         if (!image) return;
 
         try {
+            setUploading(true);
             const formData = new FormData();
             formData.append("file", image);
 
@@ -49,21 +53,66 @@ function UploadImage() {
             navigate(`/results/${job_id}`);
         } catch {
             console.error("Upload failed");
+        } finally {
+            setUploading(false);
         }
     };
 
     return (
-        <>
-            <div><h2>Upload image of books</h2></div>
-            <div>
-                <input type="file" accept="image/*" onChange={handleImageChange}/>
-            </div>
-            <button type="submit" onClick={handleSubmit}>Upload</button>
-        </>
+    <div className="bg-white border border-neutral-200 shadow-xl rounded-2xl p-10">
 
+      <ImageUploadHeader/>
 
-    )
+      {/* Upload Area */}
+      <div className="flex flex-col items-center">
+
+        <label className="w-full cursor-pointer">
+          <div className="flex flex-col items-center justify-center 
+                          border-2 border-dashed border-neutral-300 
+                          rounded-xl p-10 bg-neutral-50 
+                          hover:border-neutral-400 hover:bg-neutral-100 
+                          transition text-center">
+
+            {preview ? (
+              <img
+                src={preview}
+                alt="Preview"
+                className="max-h-64 rounded-lg shadow-md mb-4"
+              />
+            ) : (
+              <>
+                <p className="text-neutral-600 font-medium">
+                  Click to select an image
+                </p>
+                <p className="text-neutral-400 text-sm mt-1">
+                  JPG, PNG supported
+                </p>
+              </>
+            )}
+          </div>
+
+          <input
+            type="file"
+            accept="image/*"
+            onChange={handleImageChange}
+            className="hidden"
+          />
+        </label>
+
+        {/* Upload Button */}
+        <button
+          onClick={handleSubmit}
+          disabled={!image || uploading}
+          className="mt-8 px-6 py-3 rounded-lg bg-neutral-800 text-white 
+                     font-medium hover:bg-neutral-700 transition 
+                     disabled:opacity-50 disabled:cursor-not-allowed"
+        >
+          {uploading ? "Uploading..." : "Analyze Books"}
+        </button>
+      </div>
+    </div>
+  );
     
 }
 
-export default UploadImage
+export default ImageUpload
