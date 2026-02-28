@@ -8,11 +8,7 @@ type Props = {
 export default function ResultsList({ results }: Props) {
   return (
     <>
-      <h2 className="text-3xl font-semibold text-neutral-800 mb-10 text-center">
-        Your Results
-      </h2>
-
-      <div className="grid gap-6">
+      <div className="max-w-5xl mx-auto grid gap-6 sm:grid-cols-2 pb-5 pl-4 pr-4">
         {results.map((result, index) => (
           <div
             key={index}

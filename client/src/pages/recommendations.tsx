@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import useAxios from "../api/useAxios";
-import ResultCard from "../features/recommendations/components/ResultCard";
-import HomeButton from "../components/HomeButton";
 import type { JobResult } from "../types/result";
+import ResultsList from "../features/recommendations/components/ResultsList";
+import RecommendationsHeader from "../features/recommendations/components/RecommendationsHeader";
 
 /**
  * RecommendationsPage
@@ -28,20 +28,10 @@ export default function RecommendationsPage() {
   }, []);
 
   return (
-    <div>
-      <h2>Results</h2>
-      
+    <div>      
+      <RecommendationsHeader/>
       {/* Render result cards */}
-      <div>
-        <HomeButton/>
-      </div>
-      {results && (
-        <div>
-          {results.map((result, index) => (
-            <ResultCard key={index} result={result} />
-          ))}
-        </div>
-      )}
+      {results && <ResultsList results={results} />}
     </div>
   );
 }
