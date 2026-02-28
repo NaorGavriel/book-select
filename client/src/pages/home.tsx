@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import ActionPanel from "../features/image__upload/ActionPanel";
-
+import BookShelfImage from "../assets/marialaura-gionfriddo-50G3FvyQxX0-unsplash.jpg"
 /**
  * HomePage
  * --------
@@ -15,11 +15,11 @@ export default function HomePage() {
   const navigate = useNavigate();
 
   return (
-    <div className="min-h-[calc(100vh-140px)] bg-gradient-to-b from-violet to-neutral-100 px-6 py-16">
+    <div className="min-h-screen bg-linear-to-t from-violet-300 from-0% via-amber-100 via-50% to-stone-100 to-80% px-6 py-16">
       
       {/* Header */}
       <div className="max-w-5xl mx-auto mb-16">
-        <h2 className="text-4xl font-semibold tracking-tight">
+        <h2 className="text-4xl font-semibold tracking-tight text-black">
           Welcome back
         </h2>
       </div>
@@ -31,6 +31,7 @@ export default function HomePage() {
           title="Upload Picture"
           description="Upload a photo of books you're considering and receive intelligent, tailored recommendations."
           onClick={() => navigate("/upload")}
+          backgroundImage={BookShelfImage}
           highlight
         />
 
