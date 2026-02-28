@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import ActionPanel from "../features/image__upload/ActionPanel";
+import ActionPanel from "../components/ui/ActionPanel";
 import BookShelfImage from "../assets/marialaura-gionfriddo-50G3FvyQxX0-unsplash.jpg"
 /**
  * HomePage
