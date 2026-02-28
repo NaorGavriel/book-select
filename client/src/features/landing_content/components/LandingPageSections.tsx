@@ -1,5 +1,4 @@
 import InfoSection from "../../../components/ui/InfoSection"
-import  BookShelfSvg from "../../../assets/undraw_bookshelves_vhu6.svg"
 import NewsFeedSvg from "../../../assets/undraw_newsfeed_8ms9.svg"
 import UploadImageSvg from "../../../assets/undraw_upload-image_tpmp.svg"
 import ViewResultsSvg from "../../../assets/undraw_choose_5kz4.svg"

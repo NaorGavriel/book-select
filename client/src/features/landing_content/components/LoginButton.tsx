@@ -4,10 +4,8 @@ export default function LoginButton() {
     const navigate = useNavigate();
     return (
             <button
-                onClick={() => navigate("/login")}
-                className="px-8 py-3 text-base font-medium rounded-full
-                        bg-amber-300 text-black
-                        hover:bg-violet-600 hover:text-white transition"
+                onClick={() => navigate("/login")} 
+                className="px-8 py-3 text-base font-medium rounded-full border-amber-300 border-2 text-white hover:bg-zinc-700 hover:text-white transition"
             >
                 Login
             </button>

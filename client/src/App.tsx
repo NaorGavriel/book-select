@@ -12,7 +12,7 @@ import UploadPage from "./pages/Upload";
 import LandingPage from "./pages/LandingPage";
 import Layout from "./components/ui/Layout";
 import LoginButton from "./features/landing_content/components/LoginButton";
-
+import LogoutButton from "./features/authentication/components/LogoutButton";
 function AppContent() {
   const loading = usePersistentLogin();
 
@@ -36,7 +36,7 @@ function AppContent() {
 
       {/* Protected Pages */}
       <Route element={<RequireAuth />}>
-        <Route element={<Layout />}>
+        <Route element={<Layout headerRight={<LogoutButton/>}/>}>
           <Route path="/home" element={<HomePage />} />
           <Route path="/results/:jobId" element={<ResultsPage />} />
           <Route path="/recommendations" element={<RecommendationsPage />} />

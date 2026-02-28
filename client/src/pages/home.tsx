@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router-dom";
-import LogoutButton from "../features/authentication/components/LogoutButton";
-import LandingPageButton from "../components/LandingPageButton";
+import ActionPanel from "../features/image__upload/ActionPanel";
+
 /**
  * HomePage
  * --------
@@ -10,33 +10,44 @@ import LandingPageButton from "../components/LandingPageButton";
  * 1. Upload picture
  * 2. View past recommendations
  * 3. Add book to reading history
- *
- * Assumes route is protected by RequireAuth.
  */
 export default function HomePage() {
   const navigate = useNavigate();
 
   return (
-    <div>
-      <LogoutButton/>
-      <LandingPageButton/>
-      <h2>Home</h2>
+    <div className="min-h-[calc(100vh-140px)] bg-gradient-to-b from-violet to-neutral-100 px-6 py-16">
+      
+      {/* Header */}
+      <div className="max-w-5xl mx-auto mb-16">
+        <h2 className="text-4xl font-semibold tracking-tight">
+          Welcome back
+        </h2>
+      </div>
 
-      <button onClick={() => navigate("/upload")}>
-        Upload Picture
-      </button>
+      {/* Action Panels */}
+      <div className="max-w-5xl mx-auto space-y-6">
 
-      <br /><br />
+        <ActionPanel
+          title="Upload Picture"
+          description="Upload a photo of books you're considering and receive intelligent, tailored recommendations."
+          onClick={() => navigate("/upload")}
+          highlight
+        />
 
-      <button onClick={() => navigate("/recommendations")}>
-        View Past Recommendations
-      </button>
+        <ActionPanel
+          title="View Past Recommendations"
+          description="Revisit previously generated suggestions and explore your recommendation history."
+          onClick={() => navigate("/recommendations")}
+        />
 
-      <br /><br />
+        <ActionPanel
+          title="Add Book to Reading History"
+          description="Log books you've read to continuously improve your recommendation accuracy."
+          onClick={() => navigate("/reading-history")}
+        />
 
-      <button onClick={() => navigate("/reading-history")}>
-        Add Book to Reading History
-      </button>
+      </div>
     </div>
   );
 }
+
