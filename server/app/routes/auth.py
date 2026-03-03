@@ -1,16 +1,19 @@
 from app.services import auth
-from fastapi import APIRouter, HTTPException, Depends, Response, Cookie, status
+from fastapi import APIRouter, HTTPException, Depends, Response, Cookie, status, Request
 from fastapi.security import OAuth2PasswordRequestForm
 from app.schemas.token import Token
 from app.db import get_db
 from sqlalchemy.orm import Session
 from app.models.user import User
 from app.services.auth import refresh_access_token, InvalidRefreshToken
+from app.core.limiter import limiter
+
 
 router = APIRouter()
 
 @router.post("/token", response_model=Token)
-def login(response: Response, form_data: OAuth2PasswordRequestForm = Depends(), db: Session = Depends(get_db)):
+@limiter.limit("5/minute")
+def login(request: Request, response: Response, form_data: OAuth2PasswordRequestForm = Depends(), db: Session = Depends(get_db)):
     """
     Authenticate user credentials and issue JWT access token and refresh token.
 
@@ -45,11 +48,13 @@ def login(response: Response, form_data: OAuth2PasswordRequestForm = Depends(), 
 
 
 @router.post("/logout")
-def logout(response: Response):
+@limiter.limit("5/minute")
+def logout(request: Request, response: Response):
     response.delete_cookie("refresh_token")
 
 @router.post("/refresh")
-def refresh(refresh_token: str = Cookie(None)):
+@limiter.limit("5/minute")
+def refresh(request: Request, refresh_token: str = Cookie(None)):
     try:
         new_access_token = refresh_access_token(refresh_token)
     except InvalidRefreshToken as e:
