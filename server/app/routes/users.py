@@ -1,14 +1,16 @@
-from fastapi import HTTPException, Depends, APIRouter
+from fastapi import HTTPException, Depends, APIRouter, Request
 from sqlalchemy.orm import Session
 from sqlalchemy.exc import IntegrityError
 from app.schemas.user import UserCreate, UserRead
 from app.services.auth import create_new_user
 from app.db import get_db
+from app.core.limiter import limiter
 
 router = APIRouter(prefix='/users')
 
 @router.post("/", response_model=UserRead)
-def register_user(user_register_data: UserCreate, db: Session = Depends(get_db)):
+@limiter.limit("1/minute")
+def register_user(request : Request, user_register_data: UserCreate, db: Session = Depends(get_db)):
     """
     Register a new user.
 

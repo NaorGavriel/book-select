@@ -1,13 +1,16 @@
-from fastapi import APIRouter,HTTPException, Depends, UploadFile, File
+from fastapi import APIRouter,HTTPException, Depends, UploadFile, File, Request
 from sqlalchemy.orm import Session
 from app.db import get_db
 from app.services.jobs import create_job_from_image, get_job
 from app.models.user import User
 from app.services.auth import get_current_user
+from app.core.limiter import limiter
+
 router = APIRouter(prefix="/jobs", tags=["jobs"])
 
 @router.post("")
-async def post_job(file: UploadFile = File(...), db: Session = Depends(get_db), user : User = Depends(get_current_user)):
+@limiter.limit("2/minute")
+async def post_job(request: Request, file: UploadFile = File(...), db: Session = Depends(get_db), user : User = Depends(get_current_user)):
     """
     Posts new image-processing job.
 
@@ -28,7 +31,8 @@ async def post_job(file: UploadFile = File(...), db: Session = Depends(get_db), 
     }
 
 @router.get("/{job_id}")
-def get_job_status(job_id: int, db: Session = Depends(get_db), user : User = Depends(get_current_user)):
+@limiter.limit("10/minute")
+def get_job_status(request : Request, job_id: int, db: Session = Depends(get_db), user : User = Depends(get_current_user)):
     """
     Retrieve the current status of a job.
     """

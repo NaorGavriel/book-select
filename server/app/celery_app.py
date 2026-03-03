@@ -1,7 +1,7 @@
 import os
 from celery import Celery
 
-REDIS_URL = os.environ.get("REDIS_URL", "redis://redis:6379/0")
+REDIS_URL = os.environ.get("REDIS_JOBS_URL")
 
 celery_app = Celery(
     "bookselect",

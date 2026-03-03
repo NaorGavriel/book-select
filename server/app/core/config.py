@@ -11,7 +11,8 @@ if CORS_ORIGINS:
 else:
     CORS_ORIGINS = []
 
-    
+REDIS_JOB_URL = os.getenv("REDIS_JOB_URL")
+RATELIMIT_REDIS_URL = os.getenv("RATELIMIT_REDIS_URL")
 # OCR api
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 

@@ -1,15 +1,17 @@
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, Request, Response
 from app.schemas.job_results import JobResultItem
 from app.models.user import User
 from sqlalchemy.orm import Session
 from app.db import get_db
 from app.services.job_results import get_job_results, get_all_results_for_user
 from app.services.auth import get_current_user
+from app.core.limiter import limiter
 
 router = APIRouter(prefix="/results", tags=["results"])
 
 @router.get("/{job_id}", response_model=list[JobResultItem])
-def get_results(job_id: int, db: Session = Depends(get_db), user : User = Depends(get_current_user)):
+@limiter.limit("5/minute")
+def get_results(request : Request ,job_id: int, db: Session = Depends(get_db), user : User = Depends(get_current_user)):
     """
     Retrieve all results for a specific job.
 
@@ -30,7 +32,8 @@ def get_results(job_id: int, db: Session = Depends(get_db), user : User = Depend
         raise HTTPException(status_code=404, detail="Results not found")
     
 @router.get("/", response_model=list[JobResultItem])
-def get_all_results(db: Session = Depends(get_db), user : User = Depends(get_current_user)):
+@limiter.limit("5/minute")
+def get_all_results(request : Request, db: Session = Depends(get_db), user : User = Depends(get_current_user)):
     """
     Retrieve all results for a specific user.
 
