@@ -1,9 +1,9 @@
 from fastapi import Request
 import logging
 import os
+from app.core.config import GeneralConfig
 
-API_LOGGER_NAME = os.getenv("API_LOGGER_NAME")
-logger = logging.getLogger(API_LOGGER_NAME)
+logger = logging.getLogger(GeneralConfig.API_LOGGER_NAME)
 
 async def logging_middleware(request : Request, call_next):
     log_fields_extra = {

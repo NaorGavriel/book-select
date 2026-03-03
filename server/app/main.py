@@ -10,13 +10,13 @@ from app.routes.user_book import router as user_book_router
 from app.routes.auth import router as auth_router
 from fastapi.middleware.cors import CORSMiddleware
 from starlette.middleware.base import BaseHTTPMiddleware
-from app.core.config import CORS_ORIGINS
 import app.models
 from app.core.limiter import limiter
 from slowapi import _rate_limit_exceeded_handler
 from slowapi.errors import RateLimitExceeded
 from app.core.logger.logging_middleware import logging_middleware
 from app.core.logger.logger import init_logging
+from app.core.config import GeneralConfig
 
 # lifespan method, in charge of init required before application startup and shutdowns before application shutdown
 @asynccontextmanager
@@ -33,7 +33,7 @@ app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
 # attaching cors middleware, allowing requests from listed origins in CORS_ORIGINS enviornment variable
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=CORS_ORIGINS,
+    allow_origins=GeneralConfig.CORS_ALLOWED_ORIGINS,
     allow_credentials=True,
     allow_methods=["GET", "POST"],
     allow_headers=["Authorization", "Content-Type"],

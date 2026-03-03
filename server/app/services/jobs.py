@@ -5,9 +5,10 @@ from app.storage.storage_factory import get_storage_backend
 from app.storage.storage_base import StorageBase
 from app.models.jobs import Job
 import logging
-from app.core.config import API_LOGGER_NAME
+from app.core.config import GeneralConfig
 
-logger = logging.getLogger(API_LOGGER_NAME)
+
+logger = logging.getLogger(GeneralConfig.API_LOGGER_NAME)
 
 def create_job_from_image(user_id: int, image_bytes: bytes,filename: str,db: Session):
     """

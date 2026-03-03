@@ -7,7 +7,7 @@ from sqlalchemy.orm import Session
 from app.models.book import Book
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy import select, func
-from app.core.config import BOOK_CACHE_THRESHOLD
+from app.core.config import GeneralConfig
 
 def get_book_by_title_and_authors(db: Session, title: str, authors: list[str]) -> Book | None:
     # title and authors must be normalized
@@ -92,7 +92,7 @@ def check_book_cache(session : Session, search_string: str) -> Book | None:
     
     book, rank = result
     
-    if rank < BOOK_CACHE_THRESHOLD: # checking the best result's rank compared to the threshold
+    if rank < GeneralConfig.BOOK_CACHE_THRESHOLD: # checking the best result's rank compared to the threshold
             return None
     
     return book

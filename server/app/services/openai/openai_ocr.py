@@ -1,10 +1,9 @@
 from openai import OpenAI
-from app.core.config import OPENAI_API_KEY
-from app.core.config import API_LOGGER_NAME
 import logging
+from app.core.config import APIsConfig, GeneralConfig
 
-client = OpenAI(api_key=OPENAI_API_KEY)
-logger = logging.getLogger(API_LOGGER_NAME)
+client = OpenAI(api_key=APIsConfig.OPENAI_API_KEY)
+logger = logging.getLogger(GeneralConfig.API_LOGGER_NAME)
 
 def extract_books_spine_text(image_base64 : str) -> str:
     """Send bookshelf image to GPT-4o-mini and return extracted spine text as JSON."""

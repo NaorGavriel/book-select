@@ -6,9 +6,9 @@ from app.crud.books import check_book_cache, create_book
 from app.utils.text import normalize_text
 from sqlalchemy.orm import Session
 import logging 
-from app.core.config import API_LOGGER_NAME
+from app.core.config import GeneralConfig
 
-logger = logging.getLogger(API_LOGGER_NAME)
+logger = logging.getLogger(GeneralConfig.API_LOGGER_NAME)
 
 def add_book(db : Session ,title : str, author : str) -> Book | None :
     """
