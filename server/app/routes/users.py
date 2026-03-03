@@ -5,8 +5,11 @@ from app.schemas.user import UserCreate, UserRead
 from app.services.auth import create_new_user
 from app.db import get_db
 from app.core.limiter import limiter
-
+import logging
+from app.core.config import API_LOGGER_NAME
 router = APIRouter(prefix='/users')
+
+logger = logging.getLogger(API_LOGGER_NAME)
 
 @router.post("/", response_model=UserRead)
 @limiter.limit("1/minute")
