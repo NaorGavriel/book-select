@@ -1,7 +1,10 @@
 from openai import OpenAI
 from app.core.config import OPENAI_API_KEY
+from app.core.config import API_LOGGER_NAME
+import logging
 
 client = OpenAI(api_key=OPENAI_API_KEY)
+logger = logging.getLogger(API_LOGGER_NAME)
 
 def extract_books_spine_text(image_base64 : str) -> str:
     """Send bookshelf image to GPT-4o-mini and return extracted spine text as JSON."""
@@ -45,5 +48,13 @@ def extract_books_spine_text(image_base64 : str) -> str:
     )
 
     token_usage = response.usage
+
+    usage_fields = {
+        "input_tokens" : token_usage.input_tokens,
+        "output_tokens" : token_usage.output_tokens,
+        "total_tokens" : token_usage.total_tokens
+    }
+    
+    logger.info("OPENAI OCR CALL", extra=usage_fields)
     return response.output_text # JSON string (not parsed)
 

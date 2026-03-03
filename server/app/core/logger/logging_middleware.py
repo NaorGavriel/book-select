@@ -10,7 +10,7 @@ async def logging_middleware(request : Request, call_next):
         'url' : request.url.path,
         'method' : request.method
     }
-    logger.info("api call", extra=log_fields_extra)
+    logger.info("API", extra=log_fields_extra)
 
     response = await call_next(request)
     return response

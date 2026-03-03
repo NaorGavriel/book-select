@@ -1,7 +1,11 @@
 import os
 from celery import Celery
+from app.core.logger.logger import init_logging
+
 
 REDIS_URL = os.environ.get("REDIS_JOBS_URL")
+
+init_logging()
 
 celery_app = Celery(
     "bookselect",

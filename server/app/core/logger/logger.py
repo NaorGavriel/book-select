@@ -1,9 +1,5 @@
 import logging
-from app.core.logger.json_formatter import JSONFormatter
-import sys
-import queue
-from logging.handlers import QueueHandler, QueueListener, RotatingFileHandler
-import os
+import logging.config
 from pathlib import Path
 import json
 

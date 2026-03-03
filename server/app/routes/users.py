@@ -7,6 +7,7 @@ from app.db import get_db
 from app.core.limiter import limiter
 import logging
 from app.core.config import API_LOGGER_NAME
+
 router = APIRouter(prefix='/users')
 
 logger = logging.getLogger(API_LOGGER_NAME)
@@ -33,6 +34,7 @@ def register_user(request : Request, user_register_data: UserCreate, db: Session
             email=user_register_data.email,
             password=user_register_data.password
         )
+        logger.info("user created")
         return user
     
     except IntegrityError:

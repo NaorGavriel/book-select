@@ -4,6 +4,10 @@ from app.job_tasks.tasks import process_job
 from app.storage.storage_factory import get_storage_backend
 from app.storage.storage_base import StorageBase
 from app.models.jobs import Job
+import logging
+from app.core.config import API_LOGGER_NAME
+
+logger = logging.getLogger(API_LOGGER_NAME)
 
 def create_job_from_image(user_id: int, image_bytes: bytes,filename: str,db: Session):
     """
@@ -29,7 +33,10 @@ def create_job_from_image(user_id: int, image_bytes: bytes,filename: str,db: Ses
 
     # enqueing job processing task
     process_job.delay(job.id, user_id)
-
+    extra_fields = {
+        "job_id" :job.id
+    }
+    logger.info("job enqueued picture process", extra_fields)
     return job
 
 def get_job(user_id: int ,job_id: int, db: Session) -> Job:

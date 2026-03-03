@@ -5,6 +5,10 @@ from app.services.openai.openai_embedding import generate_embedding
 from app.crud.books import check_book_cache, create_book
 from app.utils.text import normalize_text
 from sqlalchemy.orm import Session
+import logging 
+from app.core.config import API_LOGGER_NAME
+
+logger = logging.getLogger(API_LOGGER_NAME)
 
 def add_book(db : Session ,title : str, author : str) -> Book | None :
     """
@@ -36,5 +40,8 @@ def add_book(db : Session ,title : str, author : str) -> Book | None :
         book_embedding = generate_embedding(book_data.get("description"))
         book_data["embedding"] = book_embedding
         book_match = create_book(db=db, book_data=book_data) # adding the new book to the database
-        
+    
+    if book_match is not None:
+        logger.info("user added book")
+
     return book_match
