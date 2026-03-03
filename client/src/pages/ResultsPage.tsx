@@ -16,7 +16,7 @@ export default function ResultsPage() {
   const navigate = useNavigate();
   const api = useAxios();
   
-  const [setStatus] = useState("pending");
+  const [status, setStatus] = useState("pending");
   const [results, setResults] = useState<JobResult[] | null>(null);
   
   if (!jobId) return <div>Invalid job</div>;
