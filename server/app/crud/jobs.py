@@ -22,11 +22,11 @@ def create_job(db: Session,user_id: int, image_path: str) -> Job:
     return job
 
 
-def get_job_by_id(db: Session, job_id: int) -> Job | None:
+def get_job_by_id(db: Session, job_id: int, user_id: int) -> Job | None:
     """
-    Fetch a job by job_id (PK).
+    Fetch a job by job_id (PK) and user_id.
     """
-    return db.query(Job).filter(Job.id == job_id).first()
+    return db.query(Job).filter(Job.id == job_id, Job.user_id == user_id).first()
 
 
 def update_job_status(db: Session, job: Job, *, status: JobStatus, error_message: str | None = None) -> Job:

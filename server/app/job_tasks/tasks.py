@@ -10,7 +10,7 @@ from app.services.ocr.ocr import extract_books_from_image
 from app.services.scoring.scoring import get_best_similarity, score_book
 
 @celery_app.task
-def process_job(job_id: int):
+def process_job(job_id: int, user_id: int):
     """
     Process a single book-detection job asynchronously.
 
@@ -27,7 +27,7 @@ def process_job(job_id: int):
     job = None
 
     try:
-        job = get_job_by_id(db, job_id)
+        job = get_job_by_id(user_id=user_id, job_id=job_id, db=db)
         if job is None:
             return
 

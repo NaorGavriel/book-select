@@ -3,6 +3,15 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
+# FASTAPI
+CORS_ORIGINS = os.getenv("CORS_ORIGINS")
+
+if CORS_ORIGINS:
+    CORS_ORIGINS = [origin.strip() for origin in CORS_ORIGINS.split(",")]
+else:
+    CORS_ORIGINS = []
+
+    
 # OCR api
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 
@@ -19,4 +28,8 @@ HASHING_ALGO = os.getenv("HASHING_ALGORITHM")
 
 TOKEN_EXPIRE_MINUTES = os.getenv("JWT_EXPIRATION_TIME_MINUTES")
 if TOKEN_EXPIRE_MINUTES is not None:
-    TOKEN_EXPIRE_MINUTES : float = float(os.getenv("JWT_EXPIRATION_TIME_MINUTES"))
+    TOKEN_EXPIRE_MINUTES : float = float(TOKEN_EXPIRE_MINUTES)
+
+JWT_EXPIRATION_TIME_REFRESH = os.getenv("JWT_EXPIRATION_TIME_REFRESH")
+if JWT_EXPIRATION_TIME_REFRESH is not None:
+    JWT_EXPIRATION_TIME_REFRESH : float = float(JWT_EXPIRATION_TIME_REFRESH)

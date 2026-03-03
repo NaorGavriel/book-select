@@ -8,6 +8,8 @@ from app.routes.jobs import router as jobs_router
 from app.routes.job_results import router as job_results_router
 from app.routes.user_book import router as user_book_router
 from app.routes.auth import router as auth_router
+from fastapi.middleware.cors import CORSMiddleware
+from app.core.config import CORS_ORIGINS
 import app.models
 
 @asynccontextmanager
@@ -16,6 +18,14 @@ async def lifespan(app: FastAPI):
     yield
 
 app = FastAPI(lifespan=lifespan)
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=CORS_ORIGINS,
+    allow_credentials=True,
+    allow_methods=["GET", "POST"],
+    allow_headers=["Authorization", "Content-Type"],
+)
 
 app.include_router(auth_router, prefix="/api")
 app.include_router(users_router, prefix="/api")

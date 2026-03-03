@@ -1,17 +1,18 @@
 from app.services import auth
-from fastapi import APIRouter, HTTPException, Depends
-from fastapi.security import OAuth2PasswordRequestForm, OAuth2PasswordRequestForm
+from fastapi import APIRouter, HTTPException, Depends, Response, Cookie, status
+from fastapi.security import OAuth2PasswordRequestForm
 from app.schemas.token import Token
 from app.db import get_db
 from sqlalchemy.orm import Session
-from app.models.user import User 
+from app.models.user import User
+from app.services.auth import refresh_access_token, InvalidRefreshToken
 
 router = APIRouter()
 
 @router.post("/token", response_model=Token)
-def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends(), db: Session = Depends(get_db)):
+def login(response: Response, form_data: OAuth2PasswordRequestForm = Depends(), db: Session = Depends(get_db)):
     """
-    Authenticate user credentials and issue a JWT access token.
+    Authenticate user credentials and issue JWT access token and refresh token.
 
     Args:
         form_data (OAuth2PasswordRequestForm): Login form payload.
@@ -27,6 +28,34 @@ def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends(), db:
     if not user:
         raise HTTPException(status_code=401, detail="Invalid credentials")
     
-    token = auth.create_token(data={"sub": user.email}) # Create JWT token with email as subject
+    access_token = auth.create_access_token(data={"sub": user.email})
+    refresh_token = auth.create_refresh_token(data={"sub": user.email})
 
-    return {"access_token": token, "token_type": "bearer"}
+    response.set_cookie(
+        key="refresh_token",
+        value=refresh_token,
+        httponly=True,
+        secure=False,
+        samesite="lax",
+        max_age= 30 * 24 * 60 * 60,       
+    )
+
+
+    return {"access_token": access_token, "token_type": "bearer"}
+
+
+@router.post("/logout")
+def logout(response: Response):
+    response.delete_cookie("refresh_token")
+
+@router.post("/refresh")
+def refresh(refresh_token: str = Cookie(None)):
+    try:
+        new_access_token = refresh_access_token(refresh_token)
+    except InvalidRefreshToken as e:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail=str(e)
+        )
+
+    return {"access_token": new_access_token}

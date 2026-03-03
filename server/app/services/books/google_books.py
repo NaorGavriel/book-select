@@ -63,10 +63,11 @@ def extract_book_data(item: dict) -> dict:
     genres = v.get("categories", [])
     description = v.get("description")
 
-    print(description)
-    if len(description) > MAX_DESCRIPTION_LENGTH: # truncating long descriptions
-        description = description[:MAX_DESCRIPTION_LENGTH]
-
+    if description is not None:
+        if len(description) > MAX_DESCRIPTION_LENGTH: # truncating long descriptions
+            description = description[:MAX_DESCRIPTION_LENGTH]
+    else :
+        description = title
     book_data = {
         "isbn_13": isbn_13,
         "title": title,
