@@ -1,6 +1,5 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { AuthProvider } from "./features/authentication/AuthContext";
-import usePersistentLogin from "./features/authentication/hooks/usePersistentLogin";
 import RequireAuth from "./features/authentication/RequireAuth";
 import LoginPage from "./pages/Login";
 import RegisterPage from "./pages/Register";
@@ -13,13 +12,8 @@ import LandingPage from "./pages/LandingPage";
 import Layout from "./components/ui/Layout";
 import LoginButton from "./features/landing_content/components/LoginButton";
 import LogoutButton from "./features/authentication/components/LogoutButton";
+
 function AppContent() {
-  const loading = usePersistentLogin();
-
-  if (loading) {
-    return <div>Loading...</div>;
-  }
-
   return (
     <Routes>
 

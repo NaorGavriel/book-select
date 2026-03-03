@@ -1,10 +1,13 @@
 import { useEffect } from "react";
-import api from "./axios";
+import api from "./axiosPrivate";
 import { useAuth } from "../features/authentication/AuthContext";
+import useRefreshToken from "./useRefreshToken";
 
-export default function useAxios() {
+
+export default function useApi() {
   const { accessToken, setAccessToken } = useAuth();
-
+  const refresh = useRefreshToken();
+ 
   useEffect(() => {
     // Request interceptor
     const requestInterceptor = api.interceptors.request.use((config) => {
@@ -25,14 +28,9 @@ export default function useAxios() {
           originalRequest._retry = true;
 
           try {
-            const response = await api.post("/refresh");
-            const newAccessToken = response.data.access_token;
-
-            setAccessToken(newAccessToken);
-
-            // retry original request
+            const newAccessToken = await refresh();
             originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
-            return api(originalRequest);
+            return api(originalRequest); // retry original request
           } catch (refreshError) {
             setAccessToken(null);
             return Promise.reject(refreshError);
@@ -47,7 +45,7 @@ export default function useAxios() {
       api.interceptors.request.eject(requestInterceptor);
       api.interceptors.response.eject(responseInterceptor);
     };
-  }, [accessToken]);
+  }, [accessToken, refresh]);
 
   return api;
 }

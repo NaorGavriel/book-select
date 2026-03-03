@@ -1,9 +1,9 @@
 import { useState, useEffect } from "react";
-import api from "../../../api/axios";
+import api from "../../../api/axiosPrivate";
 import { useAuth } from "../AuthContext";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 
-  /**
+/**
   * LoginForm
   * ---------
   * Authenticates the user and initializes the session.
@@ -12,13 +12,16 @@ import { useNavigate } from "react-router-dom";
   */
 export default function LoginForm() {
     const { accessToken, setAccessToken } = useAuth();
+    const location = useLocation();
+    const from = location.state?.from?.pathname || "/home";
+
     const navigate = useNavigate();
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
 
     useEffect(() => {
         if (accessToken) {
-        navigate("/home", { replace: true });
+            navigate(from, {replace : true}); // navigating to the previous route /home if there isn't one
         }
     }, [accessToken]);
 
