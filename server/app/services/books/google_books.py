@@ -6,7 +6,7 @@ into the internal book data format.
 """
 import httpx
 from app.core.config import GOOGLE_BOOKS_API_KEY, MAX_RESULTS
-from app.utils.text import normalize_authors, normalize_title
+from app.utils.text import normalize_authors, normalize_title, normalize_text
 MAX_DESCRIPTION_LENGTH = 1000
 BASE_URL = "https://www.googleapis.com/books/v1/volumes"
 
@@ -14,18 +14,30 @@ if not GOOGLE_BOOKS_API_KEY:
     raise RuntimeError("GOOGLE_BOOKS_API_KEY not found")
 
 
-def search_google_books(search_term : str):
+def search_google_books(search_term : str = None, title : str = None, author : str = None):
+
     """
     Query Google Books and return the top candidate.
 
     Args:
         search_term: Normalized search string.
+        title: normalized book title.
+        author : normalized book author.
 
     Returns:
         First volume result dict, or None if no results are found.
     """
+    if (title and author): # searching by title and author if exists or by a search term
+        query_term = f'intitle:"{title}" inauthor:"{author}"'
+    else :
+        query_term = search_term
+
+    if query_term is None:
+        return None
+
     params = {
-        "q": search_term,
+        "q": query_term,
+        "langRestrict": "en",
         "maxResults": MAX_RESULTS,
         "key": GOOGLE_BOOKS_API_KEY,
     }
@@ -35,9 +47,9 @@ def search_google_books(search_term : str):
         resp.raise_for_status()
         data = resp.json()
         candidates = data.get("items", [])
+        best_book = filter_results(items=candidates, author=author)
 
-
-    return candidates[0]
+    return best_book
 
 def extract_book_data(item: dict) -> dict:
     """
@@ -59,15 +71,13 @@ def extract_book_data(item: dict) -> dict:
             break
 
     title = v.get("title")
-    authors = v.get("authors", [])
-    genres = v.get("categories", [])
+    authors = v.get("authors")
     description = v.get("description")
+    genres = v.get("categories", [])
 
-    if description is not None:
-        if len(description) > MAX_DESCRIPTION_LENGTH: # truncating long descriptions
-            description = description[:MAX_DESCRIPTION_LENGTH]
-    else :
-        description = title
+    if len(description) > MAX_DESCRIPTION_LENGTH: # truncating long descriptions
+        description = description[:MAX_DESCRIPTION_LENGTH]
+
     book_data = {
         "isbn_13": isbn_13,
         "title": title,
@@ -84,6 +94,34 @@ def extract_book_data(item: dict) -> dict:
 
     return book_data
 
-def filter_books(candidates : list[dict]) -> dict | None:
-    # placeholder for now, will implement logic to filter google_books results to the most relevant candidate
-    pass
+def filter_results(items: list[dict], author : str = None) -> list[dict]:
+    """
+    Filters Google Books API results, keeps the most relevant book in english that includes these features:
+        - description 
+        - title
+        - author
+    """
+    filtered = []
+
+    for item in items:
+        volume_info = item.get("volumeInfo", {})
+        
+        if (
+            volume_info.get("language") == "en"
+            and volume_info.get("description")
+            and volume_info.get("title")
+            and volume_info.get("authors")
+            
+        ):
+            if author:
+                candidate_authors = " ".join(volume_info.get("authors", []))
+                candidate_authors_normalized = normalize_text(candidate_authors)
+                if author in candidate_authors_normalized:
+                    filtered.append(item)
+            else :
+                filtered.append(item)
+
+    if not filtered:
+        return None
+
+    return filtered[0] # most relevant
