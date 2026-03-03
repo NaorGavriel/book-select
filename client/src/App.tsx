@@ -12,6 +12,7 @@ import LandingPage from "./pages/LandingPage";
 import Layout from "./components/ui/Layout";
 import LoginButton from "./features/landing_content/components/LoginButton";
 import LogoutButton from "./features/authentication/components/LogoutButton";
+import PersistLogin from "./features/authentication/components/PersistLogin";
 
 function AppContent() {
   return (
@@ -24,21 +25,28 @@ function AppContent() {
 
       {/* Public Auth Pages */}
       <Route element={<Layout/>}>
-        <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />} />
       </Route>
 
-      {/* Protected Pages */}
-      <Route element={<RequireAuth />}>
-        <Route element={<Layout headerRight={<LogoutButton/>}/>}>
-          <Route path="/home" element={<HomePage />} />
-          <Route path="/results/:jobId" element={<ResultsPage />} />
-          <Route path="/recommendations" element={<RecommendationsPage />} />
-          <Route path="/reading-history" element={<ReadingHistoryPage />} />
-          <Route path="/upload" element={<UploadPage />} />
+      <Route element= {<PersistLogin/>}>
+        <Route element={<Layout/>}>
+          <Route path="/login" element={<LoginPage />} />
         </Route>
       </Route>
+      
 
+      {/* Protected Pages */}
+      <Route element={<PersistLogin/>}>
+        <Route element={<RequireAuth />}>
+          <Route element={<Layout headerRight={<LogoutButton/>}/>}>
+            <Route path="/home" element={<HomePage />} />
+            <Route path="/results/:jobId" element={<ResultsPage />} />
+            <Route path="/recommendations" element={<RecommendationsPage />} />
+            <Route path="/reading-history" element={<ReadingHistoryPage />} />
+            <Route path="/upload" element={<UploadPage />} />
+          </Route>
+        </Route>
+      </Route>
     </Routes>
   );
 }

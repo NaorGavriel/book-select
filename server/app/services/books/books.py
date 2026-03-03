@@ -18,13 +18,16 @@ def add_book(db : Session ,title : str, author : str) -> Book | None :
     Returns:
         Book: Existing or newly created Book, or None if no external match was found.
     """
-    normalized_text = normalize_text(title + ' ' + author) # Normalize input
+    title_normalized = normalize_text(title)
+    author_normalized = normalize_text(author)
+    normalized_text = title + ' ' + author # Normalize input
 
     book_match : Book | None = check_book_cache(session=db, search_string=normalized_text)
-
+    
     if book_match is None:
+        
         # Fallback to external search when cache miss occurs
-        book_candidate = search_google_books(normalized_text)
+        book_candidate = search_google_books(search_term=normalized_text, title=title_normalized, author=author_normalized)
 
         if book_candidate is None: # no relevant result returned from google books api
             return None
