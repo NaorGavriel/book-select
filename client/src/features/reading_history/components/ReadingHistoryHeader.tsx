@@ -6,7 +6,7 @@ export default function ReadingHistoryHeader() {
       </h2>
 
       <p className="text-lg text-neutral-600 leading-relaxed max-w-2xl">
-        Review the books you've logged and refine your recommendation accuracy.
+        View the books you've added and manage your reading history.
       </p>
     </div>
   );

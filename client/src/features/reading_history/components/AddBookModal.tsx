@@ -63,10 +63,10 @@ export default function AddBookModal({
         {/* Header */}
         <div className="mb-6">
           <h3 className="text-2xl font-semibold text-neutral-800">
-            Add New Book
+            Add a Book
           </h3>
           <p className="text-sm text-neutral-500 mt-1">
-            Fill in the book's title and author's name.
+            Enter the book title and author.
           </p>
         </div>
 
@@ -79,7 +79,7 @@ export default function AddBookModal({
             type="text"
             value={title}
             onChange={(e) => setTitle(e.target.value)}
-            placeholder="e.g. Atomic Habits"
+            placeholder="Atomic Habits"
             className="w-full rounded-lg border border-neutral-300 bg-neutral-50 px-4 py-2.5 
                        focus:outline-none focus:ring-2 focus:ring-neutral-400 
                        focus:border-neutral-400 transition"
@@ -95,7 +95,7 @@ export default function AddBookModal({
             type="text"
             value={author}
             onChange={(e) => setAuthor(e.target.value)}
-            placeholder="e.g. James Clear"
+            placeholder="James Clear"
             className="w-full rounded-lg border border-neutral-300 bg-neutral-50 px-4 py-2.5 
                        focus:outline-none focus:ring-2 focus:ring-neutral-400 
                        focus:border-neutral-400 transition"

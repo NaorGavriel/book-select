@@ -26,8 +26,17 @@ export default function ReadingHistoryPage() {
 
       <SectionDivider />
 
-      {loading && <p className="text-center">Loading books...</p>}
+      {loading && <p className="text-center">Loading your books...</p>}
       {error && <p className="text-center text-red-500">{error}</p>}
+
+      {!loading && !error && books.length === 0 && (
+        <div className="max-w-5xl mx-auto text-center py-16 text-neutral-500">
+          <p className="text-lg font-medium">No books added yet.</p>
+          <p className="mt-2 text-sm">
+            Add a book you've read to start building your reading history.
+          </p>
+        </div>
+      )}
 
       {!loading && !error && <BookList books={books} />}
 

@@ -12,10 +12,10 @@ export default function AddBookPanel({ onClick }: AddBookPanelProps) {
                    hover:opacity-95"
       >
         <h3 className="text-xl font-semibold">
-          Add a New Book
+          Add a Book
         </h3>
         <p className="text-neutral-300 mt-2">
-          Log a book you've read to refine your future recommendations.
+          Add books you've read to improve your future recommendations.
         </p>
       </button>
     </div>
