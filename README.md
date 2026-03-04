@@ -18,6 +18,15 @@ docker compose up --build
 ```
 3. Access the application at :
    ```http://localhost:5173```
+
+## Environment Variables
+Create a `.env` file in the project root and fill in the required variables.
+You can use the provided template:
+
+```
+cp .env.example .env
+```
+
 ## Features
 - Extracts book titles from uploaded bookshelf images using OCR
 - Generates personalized book recommendations using semantic similarity search based on reading history
