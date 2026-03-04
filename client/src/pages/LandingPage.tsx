@@ -14,11 +14,11 @@ export default function LandingPage() {
       {/* Hero */}
       <section className="px-6 pt-16 pb-10 max-w-4xl mx-auto text-center">
         <h2 className="text-4xl sm:text-5xl md:text-6xl font-semibold leading-tight tracking-tight">
-          sit amet, consectetur adipiscing elit.
+           Find the Right Book
         </h2>
 
         <p className="mt-8 text-lg sm:text-xl text-neutral-700 leading-relaxed">
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit, boris nisi ut aliquip ex ea
+            Upload a photo of a bookshelf and get instant recommendations based on your reading history.
         </p>
 
         <div className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-5">

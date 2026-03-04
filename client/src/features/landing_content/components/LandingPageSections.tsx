@@ -8,8 +8,8 @@ export default function LandingPageSections() {
     return (
         <section>
             <InfoSection
-            title="Add Your Favorite Books"
-            description="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
+            title="Tell Us What You Like"
+            description="Add books you’ve enjoyed so the system can understand your reading preferences."
             background="bg-neutral-800"
             isDark
             media={
@@ -23,8 +23,8 @@ export default function LandingPageSections() {
             />
             
             <InfoSection
-            title="Upload a Picture of Books"
-            description="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
+            title="Take a Shelf Photo"
+            description="Upload a photo of books from a shelf in a store, library, or anywhere you discover new titles."
             background="bg-gradient-to-b from-white via-stone-50 to-amber-50"
             reverse
             media={
@@ -38,8 +38,8 @@ export default function LandingPageSections() {
             />
 
             <InfoSection
-            title="View Tailor Made Suggestions"
-            description="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
+            title="Get Smart Recommendations"
+            description="See which books are a Good Match, Maybe, or Avoid based on your reading history."
             background="bg-neutral-800"
             isDark
             media={
