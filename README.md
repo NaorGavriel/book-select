@@ -3,6 +3,14 @@ BookSelect is a full-stack web application that helps users choose what to read 
 
 The system extracts book titles from uploaded bookshelf images using OCR, enriches them with metadata from the Google Books API, and generates recommendations using semantic similarity search based on vector embeddings.
 
+## Screenshots
+
+<p align="center">
+   <img src="https://github.com/NaorGavriel/book-select/blob/main/screenshots/reading-history-screenshot.png?raw=true" width="25%" />
+   <img src="https://github.com/NaorGavriel/book-select/blob/main/screenshots/upload-image-screenshot2.png?raw=true" width="25%" />
+   <img src="https://github.com/NaorGavriel/book-select/blob/main/screenshots/results-screenshot.png?raw=true" width="25%" />
+</p>
+
 ## Prerequisites
 - Docker (Docker Desktop)
 
