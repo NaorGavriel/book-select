@@ -213,4 +213,3 @@ __marimo__/
 server/storage/
 .vscode/settings.json
 client/node_modules
-server/screenshots
