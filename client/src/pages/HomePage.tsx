@@ -19,31 +19,35 @@ export default function HomePage() {
       
       {/* Header */}
       <div className="max-w-5xl mx-auto mb-16">
-        <h2 className="text-4xl font-semibold tracking-tight text-black">
-          Welcome back
-        </h2>
+          <h2 className="text-4xl font-semibold tracking-tight text-black">
+            Discover Your Next Great Book
+          </h2>
+
+          <p className="text-neutral-600 mt-2">
+            Upload a photo of a bookshelf and find out which books match your reading taste.
+          </p>
       </div>
 
       {/* Action Panels */}
       <div className="max-w-5xl mx-auto space-y-6">
 
         <ActionPanel
-          title="Upload Picture"
-          description="Upload a photo of books you're considering and receive intelligent, tailored recommendations."
+          title="Scan a Bookshelf"
+          description="Upload a bookshelf photo and see which books match your taste."
           onClick={() => navigate("/upload")}
           backgroundImage={BookShelfImage}
           highlight
         />
 
         <ActionPanel
-          title="View Past Recommendations"
-          description="Revisit previously generated suggestions and explore your recommendation history."
+          title="View Recommendations"
+          description="View your previous recommendations and matched books."
           onClick={() => navigate("/recommendations")}
         />
 
         <ActionPanel
-          title="Add Book to Reading History"
-          description="Log books you've read to continuously improve your recommendation accuracy."
+          title="Update Your Reading History"
+          description="Add books you've read to improve your recommendations."
           onClick={() => navigate("/reading-history")}
         />
 
