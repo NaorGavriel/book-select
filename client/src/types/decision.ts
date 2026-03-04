@@ -1,0 +1,1 @@
+export type Decision = "strong_match" | "consider" | "avoid";

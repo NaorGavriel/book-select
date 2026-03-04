@@ -1,9 +1,12 @@
 /**
  * Represents a single recommendation / job result
- */export type JobResult = {
+ */
+import type { Decision } from "./decision";
+
+export interface JobResult {
   title: string;
   authors: string[];
-  decision: string;
+  decision: Decision;
   confidence: number;
   explanation: string;
-};
+}
