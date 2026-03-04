@@ -1,4 +1,4 @@
-import {useState} from 'react'
+import { useState } from 'react'
 import useAxios from '../../api/useAxios';
 import { useNavigate } from 'react-router';
 import ImageUploadHeader from './components/ImageUploadHeader';
@@ -11,57 +11,57 @@ import ImageUploadHeader from './components/ImageUploadHeader';
  * - On success will navigate to /results
  */
 function ImageUpload() {
-    const api = useAxios();
-    const navigate = useNavigate();
+  const api = useAxios();
+  const navigate = useNavigate();
 
-    const [image, setImage] = useState<File | null>(null); // Selected image file (null until user chooses a file)
-    const [preview, setPreview] = useState<string | null>(null);
-    const [uploading, setUploading] = useState(false);
+  const [image, setImage] = useState<File | null>(null); // Selected image file (null until user chooses a file)
+  const [preview, setPreview] = useState<string | null>(null);
+  const [uploading, setUploading] = useState(false);
 
-    /**
-     * Handles file selection from input.
-     * Stores the first selected file in state.
-     */
-    const handleImageChange = (event : React.ChangeEvent<HTMLInputElement>) => {
-        const imageFile = event.target.files?.[0];
-        if (imageFile) {
-            setImage(imageFile);
-            setPreview(URL.createObjectURL(imageFile));
-        }
+  /**
+   * Handles file selection from input.
+   * Stores the first selected file in state.
+   */
+  const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const imageFile = event.target.files?.[0];
+    if (imageFile) {
+      setImage(imageFile);
+      setPreview(URL.createObjectURL(imageFile));
     }
+  }
 
-    /**
-     * Sends the selected image to the backend.
-     * Creates multipart/form-data request and navigates to results on success.
-     */
-    const handleSubmit = async () => {
-    
-        if (!image) return;
+  /**
+   * Sends the selected image to the backend.
+   * Creates multipart/form-data request and navigates to results on success.
+   */
+  const handleSubmit = async () => {
 
-        try {
-            setUploading(true);
-            const formData = new FormData();
-            formData.append("file", image);
+    if (!image) return;
 
-            const response = await api.post("/jobs", formData, {
-            headers: {
-                "Content-Type": "multipart/form-data",
-            },
-            });
-            
-            const { job_id } = response.data; // extracting job_id from response
-            navigate(`/results/${job_id}`);
-        } catch {
-            console.error("Upload failed");
-        } finally {
-            setUploading(false);
-        }
-    };
+    try {
+      setUploading(true);
+      const formData = new FormData();
+      formData.append("file", image);
 
-    return (
+      const response = await api.post("/jobs", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+
+      const { job_id } = response.data; // extracting job_id from response
+      navigate(`/results/${job_id}`);
+    } catch {
+      console.error("Upload failed");
+    } finally {
+      setUploading(false);
+    }
+  };
+
+  return (
     <div className="bg-white border border-neutral-200 shadow-xl rounded-2xl p-10">
 
-      <ImageUploadHeader/>
+      <ImageUploadHeader />
 
       {/* Upload Area */}
       <div className="flex flex-col items-center">
@@ -74,18 +74,23 @@ function ImageUpload() {
                           transition text-center">
 
             {preview ? (
-              <img
-                src={preview}
-                alt="Preview"
-                className="max-h-64 rounded-lg shadow-md mb-4"
-              />
+              <>
+                <img
+                  src={preview}
+                  alt="Preview"
+                  className="max-h-64 rounded-lg shadow-md mb-4"
+                />
+                <p className="text-sm text-neutral-500">
+                  Click to change image
+                </p>
+              </>
             ) : (
               <>
                 <p className="text-neutral-600 font-medium">
-                  Click to select an image
+                  Click to upload a bookshelf photo
                 </p>
                 <p className="text-neutral-400 text-sm mt-1">
-                  JPG, PNG supported
+                  JPG or PNG image
                 </p>
               </>
             )}
@@ -104,15 +109,15 @@ function ImageUpload() {
           onClick={handleSubmit}
           disabled={!image || uploading}
           className="mt-8 px-6 py-3 rounded-lg bg-neutral-800 text-white 
-                     font-medium hover:bg-neutral-700 transition 
-                     disabled:opacity-50 disabled:cursor-not-allowed"
+                      font-medium hover:bg-neutral-700 transition 
+                      disabled:opacity-50 disabled:cursor-not-allowed"
         >
-          {uploading ? "Uploading..." : "Analyze Books"}
+          {uploading ? "Uploading..." : "Get Book Matches"}
         </button>
       </div>
     </div>
   );
-    
+
 }
 
 export default ImageUpload
