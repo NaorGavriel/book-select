@@ -5,14 +5,18 @@ Handles external search requests and transforms API responses
 into the internal book data format.
 """
 import httpx
-from app.core.config import GOOGLE_BOOKS_API_KEY, MAX_RESULTS
 from app.utils.text import normalize_authors, normalize_title, normalize_text
+import logging
+from app.core.config import APIsConfig
+from app.core.config import GeneralConfig
+
 MAX_DESCRIPTION_LENGTH = 1000
 BASE_URL = "https://www.googleapis.com/books/v1/volumes"
 
-if not GOOGLE_BOOKS_API_KEY:
+if not APIsConfig.GOOGLE_BOOKS_API_KEY:
     raise RuntimeError("GOOGLE_BOOKS_API_KEY not found")
 
+logger = logging.getLogger(GeneralConfig.API_LOGGER_NAME)
 
 def search_google_books(search_term : str = None, title : str = None, author : str = None):
 
@@ -38,11 +42,12 @@ def search_google_books(search_term : str = None, title : str = None, author : s
     params = {
         "q": query_term,
         "langRestrict": "en",
-        "maxResults": MAX_RESULTS,
-        "key": GOOGLE_BOOKS_API_KEY,
+        "maxResults": APIsConfig.MAX_RESULTS,
+        "key": APIsConfig.GOOGLE_BOOKS_API_KEY,
     }
 
     with httpx.Client(timeout=5.0) as client: # Short timeout to prevent worker blocking on external API
+        logger.info("google books api call")
         resp = client.get(BASE_URL, params=params)
         resp.raise_for_status()
         data = resp.json()

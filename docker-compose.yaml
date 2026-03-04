@@ -3,6 +3,11 @@ services:
   # FastAPI HTTP API service
   api:
     build: ./server
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
     command: ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000", "--reload"] # Run FastAPI with Uvicorn in development mode
     volumes:
       - ./server/app:/code/app
@@ -11,17 +16,19 @@ services:
       - "127.0.0.1:8000:8000" # host:container
     environment:
       DATABASE_URL: postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@db:5432/${POSTGRES_DB} # Database connection string
-      REDIS_JOBS_URL: ${REDIS_URL} # Redis jobs connection URL
+      REDIS_JOBS_URL: ${REDIS_JOBS_URL} # Redis jobs connection URL
       GOOGLE_BOOKS_API_KEY: ${GOOGLE_BOOKS_API_KEY}
       GOOGLE_BOOKS_MAX_RESULTS: ${GOOGLE_BOOKS_MAX_RESULTS}
       BOOK_CACHE_THRESHOLD: ${BOOK_CACHE_THRESHOLD}
       OPENAI_API_KEY: ${OPENAI_API_KEY}
       JWT_SECRET: ${JWT_SECRET}
       JWT_EXPIRATION_TIME_MINUTES: ${JWT_EXPIRATION_TIME_MINUTES}
-      HASHING_ALGORITHM : ${HASHING_ALGORITHM}
+      HASH_ALGORITHM : ${HASH_ALGORITHM}
       JWT_EXPIRATION_TIME_REFRESH: ${JWT_EXPIRATION_TIME_REFRESH}
-      CORS_ORIGINS : ${CORS_ORIGINS}
-      RATELIMIT_REDIS_URL : ${RATELIMIT_REDIS_URL}
+      CORS_ALLOWED_ORIGINS : ${CORS_ALLOWED_ORIGINS}
+      REDIS_RATELIMIT_URL : ${REDIS_RATELIMIT_URL}
+      API_LOGGER_NAME : ${API_LOGGER_NAME}
+      STORAGE_BACKEND : ${STORAGE_BACKEND}
     depends_on:
       - db
       - redis
@@ -35,12 +42,13 @@ services:
       - ./server/storage:/code/storage
     environment:
       DATABASE_URL: postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@db:5432/${POSTGRES_DB}
-      REDIS_URL: ${REDIS_URL} # Redis connection URL
+      REDIS_JOBS_URL: ${REDIS_JOBS_URL} # Redis connection URL
       GOOGLE_BOOKS_API_KEY: ${GOOGLE_BOOKS_API_KEY}
       GOOGLE_BOOKS_MAX_RESULTS: ${GOOGLE_BOOKS_MAX_RESULTS}
       OPENAI_API_KEY: ${OPENAI_API_KEY}
       BOOK_CACHE_THRESHOLD: ${BOOK_CACHE_THRESHOLD}
-      REDIS_JOBS_URL : ${REDIS_JOBS_URL}
+      API_LOGGER_NAME : ${API_LOGGER_NAME}
+      STORAGE_BACKEND : ${STORAGE_BACKEND}
     depends_on: # Worker must start after Redis (broker) and Postgres (storage)
       - redis
       - db

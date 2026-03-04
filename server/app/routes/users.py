@@ -5,8 +5,12 @@ from app.schemas.user import UserCreate, UserRead
 from app.services.auth import create_new_user
 from app.db import get_db
 from app.core.limiter import limiter
+import logging
+from app.core.config import GeneralConfig
 
 router = APIRouter(prefix='/users')
+
+logger = logging.getLogger(GeneralConfig.API_LOGGER_NAME)
 
 @router.post("/", response_model=UserRead)
 @limiter.limit("1/minute")
@@ -30,6 +34,7 @@ def register_user(request : Request, user_register_data: UserCreate, db: Session
             email=user_register_data.email,
             password=user_register_data.password
         )
+        logger.info("user created")
         return user
     
     except IntegrityError:

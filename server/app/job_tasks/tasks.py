@@ -8,6 +8,10 @@ from app.crud.job_results import create_job_result
 from app.services.books.resolver import resolve_books
 from app.services.ocr.ocr import extract_books_from_image
 from app.services.scoring.scoring import get_best_similarity, score_book
+import logging
+from app.core.config import GeneralConfig
+
+logger = logging.getLogger(GeneralConfig.API_LOGGER_NAME)
 
 @celery_app.task
 def process_job(job_id: int, user_id: int):
@@ -34,7 +38,9 @@ def process_job(job_id: int, user_id: int):
         if job.status != JobStatus.pending: # preventing double-exec of the job by checking status
             return
 
+        
         update_job_status(db, job, status=JobStatus.processing)
+        logger.info(f"job {job_id} processing")
         storage = get_storage_backend()
 
         
@@ -50,11 +56,13 @@ def process_job(job_id: int, user_id: int):
 
         db.commit()
         update_job_status(db, job, status=JobStatus.completed)
+        logger.info(f"job {job_id} completed")
 
     except Exception as e:
         db.rollback() # Roll back DB changes on failure
         if job is not None:
             update_job_status(db, job, status=JobStatus.failed, error_message=str(e))
+            logger.info(f"job {job_id} failed")
         raise
 
     finally:

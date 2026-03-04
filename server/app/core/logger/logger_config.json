@@ -1,0 +1,34 @@
+{
+    "version": 1,
+    "disable_existing_loggers": false,
+    "formatters": {
+        "basic": {
+            "format": "%(asctime)s | %(levelname)s | %(message)s",
+            "datefmt": "%Y-%m-%dT%H:%M:%S%z"
+        },
+        "json": {
+            "()": "app.core.logger.json_formatter.JSONFormatter",
+            "fmt_keys": {
+                "timestamp": "timestamp",
+                "level" : "levelname",
+                "message" : "message"
+            }
+        }
+    },
+    "handlers" : {
+        "stdout": {
+            "class": "logging.StreamHandler",
+            "level": "INFO",
+            "formatter": "json",
+            "stream": "ext://sys.stdout"
+        }
+    },
+    "loggers": {
+        "root": {
+            "level": "INFO",
+            "handlers": [
+                "stdout"
+            ]
+        }
+    }
+}
