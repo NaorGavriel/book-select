@@ -3,7 +3,7 @@ import useAxios from "../api/useAxios";
 import type { JobResult } from "../types/result";
 import ResultsList from "../features/recommendations/components/ResultsList";
 import RecommendationsHeader from "../features/recommendations/components/RecommendationsHeader";
-
+import SectionDivider from "../components/ui/SectionDivider";
 /**
  * RecommendationsPage
  * -----------
@@ -28,7 +28,8 @@ export default function RecommendationsPage() {
   }, []);
 
   return (
-    <div>      
+    <div className="min-h-screen bg-linear-to-tl from-amber-100/50 via-violet-50 to-stone-50">    
+
       <RecommendationsHeader/>
       {/* Render result cards */}
       {results && <ResultsList results={results} />}

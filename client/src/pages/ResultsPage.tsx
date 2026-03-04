@@ -31,7 +31,7 @@ export default function ResultsPage() {
   };
 
   return (
-    <div className="min-h-[calc(100vh-140px)] bg-linear-to-b from-neutral-100 to-slate-100 px-6 py-16">
+    <div className="min-h-screen bg-linear-to-tl from-amber-100/50 via-violet-50 to-stone-50">
       <div className="max-w-4xl mx-auto">
         <ResultsHeader/>
         {/* LOADING STATE */}
