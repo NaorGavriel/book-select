@@ -49,9 +49,9 @@ def extract_books_spine_text(image_base64 : str) -> str:
     token_usage = response.usage
 
     usage_fields = {
-        "input_tokens" : token_usage.input_tokens,
-        "output_tokens" : token_usage.output_tokens,
-        "total_tokens" : token_usage.total_tokens
+        'input_tokens' : token_usage.input_tokens,
+        'output_tokens' : token_usage.output_tokens,
+        'total_tokens' : token_usage.total_tokens
     }
     
     logger.info("OPENAI OCR CALL", extra=usage_fields)
