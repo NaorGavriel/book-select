@@ -29,6 +29,7 @@ services:
       REDIS_RATELIMIT_URL : ${REDIS_RATELIMIT_URL}
       API_LOGGER_NAME : ${API_LOGGER_NAME}
       STORAGE_BACKEND : ${STORAGE_BACKEND}
+      MAX_IMAGE_SIZE : ${MAX_IMAGE_SIZE}
     depends_on:
       - db
       - redis
