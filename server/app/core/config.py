@@ -26,6 +26,10 @@ class GeneralConfig:
     API_LOGGER_NAME = os.getenv("API_LOGGER_NAME", "default_logger")
     STORAGE_BACKEND= os.getenv("STORAGE_BACKEND", "local")
 
+class AWSConfig:
+    AWS_REGION = os.getenv("AWS_REGION")
+    BUCKET_NAME = os.getenv("BUCKET_NAME")
+
 class APIsConfig:
     # Google api settings
     GOOGLE_BOOKS_API_KEY = os.getenv("GOOGLE_BOOKS_API_KEY")

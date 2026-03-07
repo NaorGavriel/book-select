@@ -39,7 +39,6 @@ async def post_job(request: Request, file: UploadFile = File(...), db: Session =
     job = create_job_from_image(
         user_id=user.id,
         image_bytes=processed_image_bytes,
-        filename=file.filename,
         db=db,
     )
 
