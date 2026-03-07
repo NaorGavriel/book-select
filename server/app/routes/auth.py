@@ -31,8 +31,8 @@ def login(request: Request, response: Response, form_data: OAuth2PasswordRequest
     if not user:
         raise HTTPException(status_code=401, detail="Invalid credentials")
     
-    access_token = auth.create_access_token(data={"sub": user.email})
-    refresh_token = auth.create_refresh_token(data={"sub": user.email})
+    access_token = auth.create_access_token(data={"sub": str(user.id)})
+    refresh_token = auth.create_refresh_token(data={"sub": str(user.id)})
 
     response.set_cookie(
         key="refresh_token",
