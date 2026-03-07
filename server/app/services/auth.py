@@ -1,5 +1,5 @@
 from datetime import datetime, timedelta, timezone
-from fastapi import HTTPException, Depends, status
+from fastapi import HTTPException, Depends, status, Request
 from fastapi.security import OAuth2PasswordBearer
 from jose import jwt, JWTError
 import bcrypt
@@ -85,7 +85,7 @@ def create_refresh_token(data: dict):
     return encoded_jwt    
 
 # the get_current_user method gets a token as parameter and checks if it can decode into the username, meaning if its a valid token
-def get_current_user(token : str = Depends(oauth2_bearer), db: Session = Depends(get_db)):
+def get_current_user(request: Request,token : str = Depends(oauth2_bearer), db: Session = Depends(get_db)):
     """
     Validate JWT and return the authenticated user.
 
@@ -98,16 +98,11 @@ def get_current_user(token : str = Depends(oauth2_bearer), db: Session = Depends
         headers={"WWW-Authenticate": "Bearer"}
     )
 
-    try:
-        # Decode and validate token
-        payload = jwt.decode(token, AuthConfig.JWT_SECRET, algorithms=[AuthConfig.HASH_ALGORITHM])
-        user_id: int = payload.get("sub")
-        token_type : str = payload.get("type")
-        if user_id == None or token_type != "access":
-            raise cred_excep
-    except JWTError:
+    payload = request.state.jwt_payload
+    if payload is None :
         raise cred_excep
 
+    user_id = payload["sub"]
     try:
         user = get_user_by_user_id(db=db, user_id=user_id)
     except UserNotFound:

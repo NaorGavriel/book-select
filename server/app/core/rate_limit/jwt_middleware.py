@@ -14,6 +14,7 @@ class JWTMiddleware(BaseHTTPMiddleware):
         auth_header = request.headers.get("authorization")
 
         if auth_header and auth_header.startswith("Bearer "):
+            print("auth_header exists")
             token = auth_header.split(" ")[1]
 
             try:
@@ -22,7 +23,7 @@ class JWTMiddleware(BaseHTTPMiddleware):
                     AuthConfig.JWT_SECRET,
                     algorithms=[AuthConfig.HASH_ALGORITHM]
                 )
-
+                print(payload)
                 request.state.jwt_payload = payload
 
             except JWTError:
