@@ -11,13 +11,14 @@ from app.routes.auth import router as auth_router
 from fastapi.middleware.cors import CORSMiddleware
 from starlette.middleware.base import BaseHTTPMiddleware
 import app.models
-from app.core.rate_limit.limiter import limiter
 from slowapi import _rate_limit_exceeded_handler
 from slowapi.errors import RateLimitExceeded
 from app.core.logger.logging_middleware import logging_middleware
 from app.core.logger.logger import init_logging
 from app.core.config import GeneralConfig
 from app.core.rate_limit.jwt_middleware import JWTMiddleware
+from app.core.rate_limit.limiter import limiter
+
 
 # lifespan method, in charge of init required before application startup and shutdowns before application shutdown
 @asynccontextmanager
@@ -29,7 +30,6 @@ async def lifespan(app: FastAPI):
 app = FastAPI(lifespan=lifespan)
 app.state.limiter = limiter
 app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
-
 
 # attaching cors middleware, allowing requests from listed origins in CORS_ORIGINS enviornment variable
 app.add_middleware(

@@ -53,7 +53,7 @@ def logout(request: Request, response: Response):
     response.delete_cookie("refresh_token")
 
 @router.post("/refresh")
-@limiter.limit("5/minute")
+@limiter.limit("30/minute")
 def refresh(request: Request, refresh_token: str = Cookie(None)):
     try:
         new_access_token = refresh_access_token(refresh_token)
