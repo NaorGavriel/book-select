@@ -50,6 +50,7 @@ services:
       BOOK_CACHE_THRESHOLD: ${BOOK_CACHE_THRESHOLD}
       API_LOGGER_NAME : ${API_LOGGER_NAME}
       STORAGE_BACKEND : ${STORAGE_BACKEND}
+      MAX_IMAGE_SIZE : ${MAX_IMAGE_SIZE}
     depends_on: # Worker must start after Redis (broker) and Postgres (storage)
       - redis
       - db
