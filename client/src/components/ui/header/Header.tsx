@@ -23,7 +23,7 @@ export default function Header({ rightContent }: HeaderProps) {
   const [menuOpen, setMenuOpen] = useState(false); // Controls whether the mobile navigation menu is visible.
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b border-neutral-700 bg-neutral-900/92 backdrop-blur">
+    <header className="sticky top-0 z-40 w-full border-b border-neutral-700 bg-neutral-900/92 backdrop-blur">
       <div className="max-w-6xl mx-auto px-6 py-4">
 
          {/* Top header row */}

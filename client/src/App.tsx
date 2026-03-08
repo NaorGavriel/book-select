@@ -13,11 +13,12 @@ import Layout from "./components/ui/Layout";
 import LoginButton from "./features/landing_content/components/LoginButton";
 import LogoutButton from "./features/authentication/components/LogoutButton";
 import PersistLogin from "./features/authentication/components/PersistLogin";
+import RateLimitPopup from "./components/RateLimitPopup";
+
 
 function AppContent() {
   return (
     <Routes>
-
       {/* Landing Page Layout */}
       <Route element={<Layout headerRight={<LoginButton />} />}>
         <Route path="/" element={<LandingPage />} />
@@ -55,6 +56,7 @@ export default function App() {
   return (
       <AuthProvider>
         <BrowserRouter>
+          <RateLimitPopup/>
           <AppContent />
         </BrowserRouter>
       </AuthProvider>
