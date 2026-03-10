@@ -8,7 +8,7 @@ from app.core.rate_limit.limiter import limiter
 from app.utils.image import process_image
 from PIL import UnidentifiedImageError
 from starlette.concurrency import run_in_threadpool
-from app.core.config import GeneralConfig
+from app.core.config.config import settings
 
 router = APIRouter(prefix="/jobs", tags=["jobs"])
 
@@ -22,10 +22,10 @@ async def post_job(request: Request, file: UploadFile = File(...), db: Session =
     Returns immediately with job_id for polling.
     """
     image_bytes = await file.read()
-    if len(image_bytes) > GeneralConfig.MAX_IMAGE_SIZE:
+    if len(image_bytes) > settings.MAX_IMAGE_SIZE:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
-            detail=f"Image larger than {GeneralConfig.MAX_IMAGE_SIZE/(1024*1024)} MB"
+            detail=f"Image larger than {settings.MAX_IMAGE_SIZE/(1024*1024)} MB"
         )
 
     try: 

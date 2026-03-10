@@ -7,16 +7,15 @@ into the internal book data format.
 import httpx
 from app.utils.text import normalize_authors, normalize_title, normalize_text
 import logging
-from app.core.config import APIsConfig
-from app.core.config import GeneralConfig
+from app.core.config.config import settings
 
 MAX_DESCRIPTION_LENGTH = 1000
 BASE_URL = "https://www.googleapis.com/books/v1/volumes"
 
-if not APIsConfig.GOOGLE_BOOKS_API_KEY:
+if not settings.GOOGLE_BOOKS_API_KEY:
     raise RuntimeError("GOOGLE_BOOKS_API_KEY not found")
 
-logger = logging.getLogger(GeneralConfig.API_LOGGER_NAME)
+logger = logging.getLogger(settings.API_LOGGER_NAME)
 
 def search_google_books(search_term : str = None, title : str = None, author : str = None):
 
@@ -42,8 +41,8 @@ def search_google_books(search_term : str = None, title : str = None, author : s
     params = {
         "q": query_term,
         "langRestrict": "en",
-        "maxResults": APIsConfig.MAX_RESULTS,
-        "key": APIsConfig.GOOGLE_BOOKS_API_KEY,
+        "maxResults": settings.GOOGLE_BOOKS_MAX_RESULTS,
+        "key": settings.GOOGLE_BOOKS_API_KEY,
     }
 
     with httpx.Client(timeout=5.0) as client: # Short timeout to prevent worker blocking on external API

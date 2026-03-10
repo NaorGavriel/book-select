@@ -9,12 +9,12 @@ from app.services.books.resolver import resolve_books
 from app.services.ocr.ocr import extract_books_from_image
 from app.services.scoring.scoring import get_best_similarity, score_book
 import logging
-from app.core.config import GeneralConfig
+from app.core.config.config import settings
 
 class JobFailed(Exception):
     pass
 
-logger = logging.getLogger(GeneralConfig.API_LOGGER_NAME)
+logger = logging.getLogger(settings.API_LOGGER_NAME)
 
 @celery_app.task
 def process_job(job_id: int, user_id: int):

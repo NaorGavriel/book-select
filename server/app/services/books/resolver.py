@@ -11,9 +11,9 @@ from app.crud.books import create_book, check_book_cache
 from app.services.openai.openai_embedding import generate_embedding
 from app.utils.text import normalize_text
 import logging
-from app.core.config import GeneralConfig
+from app.core.config.config import settings
 
-logger = logging.getLogger(GeneralConfig.API_LOGGER_NAME)
+logger = logging.getLogger(settings.API_LOGGER_NAME)
 
 def resolve_books(db: Session, detected_books: list[str]) -> list[Book]:
     """

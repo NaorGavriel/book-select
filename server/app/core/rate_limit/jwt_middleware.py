@@ -2,7 +2,7 @@ from starlette.middleware.base import BaseHTTPMiddleware
 from fastapi import Request
 from jose import jwt, JWTError
 
-from app.core.config import AuthConfig
+from app.core.config.config import settings
 
 
 class JWTMiddleware(BaseHTTPMiddleware):
@@ -20,8 +20,8 @@ class JWTMiddleware(BaseHTTPMiddleware):
             try:
                 payload = jwt.decode(
                     token,
-                    AuthConfig.JWT_SECRET,
-                    algorithms=[AuthConfig.HASH_ALGORITHM]
+                    settings.JWT_SECRET,
+                    algorithms=[settings.HASH_ALGORITHM]
                 )
                 print(payload)
                 request.state.jwt_payload = payload

@@ -1,7 +1,7 @@
 from openai import OpenAI
-from app.core.config import APIsConfig
+from app.core.config.config import settings
 
-client = OpenAI(api_key=APIsConfig.OPENAI_API_KEY)
+client = OpenAI(api_key=settings.OPENAI_API_KEY)
 
 def generate_embedding(description : str) -> list[float]:
     """

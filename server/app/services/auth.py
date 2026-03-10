@@ -8,12 +8,12 @@ from sqlalchemy.orm import Session
 from app.db import get_db
 from app.models.user import User
 from app.crud.users import create_user
-from app.core.config import AuthConfig
+from app.core.config.config import settings
 
 class InvalidRefreshToken(Exception):
     pass
 
-if not AuthConfig.JWT_SECRET:
+if not settings.JWT_SECRET:
     raise RuntimeError("Missing JWT_SECRET_KEY")
 
 oauth2_bearer = OAuth2PasswordBearer(tokenUrl="/api/token/")
@@ -54,12 +54,12 @@ def create_access_token(data: dict):
     """
     data_to_encode = data.copy()
 
-    expires_delta = timedelta(minutes=AuthConfig.ACCESS_TOKEN_EXP_MINUTES)
+    expires_delta = timedelta(minutes=settings.ACCESS_TOKEN_EXP_MINUTES)
     expire = datetime.now(timezone.utc) + expires_delta
     data_to_encode.update({"exp":expire,
                            "type": "access"})
 
-    encoded_jwt = jwt.encode(data_to_encode, AuthConfig.JWT_SECRET, algorithm=AuthConfig.HASH_ALGORITHM)
+    encoded_jwt = jwt.encode(data_to_encode, settings.JWT_SECRET, algorithm=settings.HASH_ALGORITHM)
     payload = jwt.decode(encoded_jwt,key=None, options={"verify_signature": False})
     print(payload)
     return encoded_jwt
@@ -76,12 +76,12 @@ def create_refresh_token(data: dict):
     """
     data_to_encode = data.copy()
 
-    expires_delta = timedelta(days=AuthConfig.REFRESH_TOKEN_EXP_DAYS)
+    expires_delta = timedelta(days=settings.REFRESH_TOKEN_EXP_DAYS)
     expire = datetime.now(timezone.utc) + expires_delta
     data_to_encode.update({"exp":expire,
                            "type": "refresh"})
 
-    encoded_jwt = jwt.encode(data_to_encode, AuthConfig.JWT_SECRET, algorithm=AuthConfig.HASH_ALGORITHM)
+    encoded_jwt = jwt.encode(data_to_encode, settings.JWT_SECRET, algorithm=settings.HASH_ALGORITHM)
     return encoded_jwt    
 
 # the get_current_user method gets a token as parameter and checks if it can decode into the username, meaning if its a valid token
@@ -115,7 +115,7 @@ def refresh_access_token(refresh_token: str) -> str:
         raise InvalidRefreshToken("Missing refresh token")
 
     try:
-        payload = jwt.decode(refresh_token, AuthConfig.JWT_SECRET, algorithms=[AuthConfig.HASH_ALGORITHM])
+        payload = jwt.decode(refresh_token, settings.JWT_SECRET, algorithms=[settings.HASH_ALGORITHM])
     except JWTError:
         raise InvalidRefreshToken("Invalid refresh token")
 
@@ -130,7 +130,7 @@ def refresh_access_token(refresh_token: str) -> str:
 
 def decode_token(token : str):
     try:
-        payload = jwt.decode(token, AuthConfig.JWT_SECRET, algorithms=[AuthConfig.HASH_ALGORITHM])
+        payload = jwt.decode(token, settings.JWT_SECRET, algorithms=[settings.HASH_ALGORITHM])
         return payload
     except JWTError:
         return None

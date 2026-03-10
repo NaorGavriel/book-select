@@ -6,11 +6,11 @@ from app.services.auth import create_new_user
 from app.db import get_db
 from app.core.rate_limit.limiter import limiter
 import logging
-from app.core.config import GeneralConfig
+from app.core.config.config import settings
 
 router = APIRouter(prefix='/users')
 
-logger = logging.getLogger(GeneralConfig.API_LOGGER_NAME)
+logger = logging.getLogger(settings.API_LOGGER_NAME)
 
 @router.post("/", response_model=UserRead)
 @limiter.limit("1/minute")

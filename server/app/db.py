@@ -1,11 +1,10 @@
 import os
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
-
-DATABASE_URL = os.environ["DATABASE_URL"]
+from app.core.config.config import settings
 
 engine = create_engine(
-    DATABASE_URL,
+    settings.database_url,
     future=True
 )
 

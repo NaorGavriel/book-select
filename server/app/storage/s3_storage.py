@@ -1,7 +1,7 @@
 import boto3
 from app.storage.utils import generate_image_key
 from app.storage.storage_base import StorageBase
-from app.core.config import AWSConfig
+from app.core.config.config import settings
 
 class S3Storage(StorageBase):
     """
@@ -9,8 +9,8 @@ class S3Storage(StorageBase):
     """
 
     def __init__(self):
-        self.bucket_name = AWSConfig.BUCKET_NAME
-        self.s3 = boto3.client("s3", region_name=AWSConfig.AWS_REGION)
+        self.bucket_name = settings.BUCKET_NAME
+        self.s3 = boto3.client("s3", region_name=settings.AWS_REGION)
 
     def save_image(self, *, image_bytes: bytes, user_id: int) -> str:
         """
