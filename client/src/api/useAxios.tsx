@@ -22,9 +22,16 @@ export default function useApi() {
       (response) => response,
       async (error) => {
         const originalRequest = error.config;
+        const status = error.response?.status;
+
+        // Handle rate limit
+        if (status === 429) {
+          window.dispatchEvent(new Event("rate-limit"));
+          return Promise.reject(error);
+        }
 
         // If access token expired
-        if (error.response?.status === 401 && !originalRequest._retry) {
+        if (status === 401 && !originalRequest._retry) {
           originalRequest._retry = true;
 
           try {

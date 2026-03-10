@@ -6,7 +6,7 @@ from app.db import get_db
 from sqlalchemy.orm import Session
 from app.models.user import User
 from app.services.auth import refresh_access_token, InvalidRefreshToken
-from app.core.limiter import limiter
+from app.core.rate_limit.limiter import limiter
 
 
 router = APIRouter()
@@ -31,8 +31,8 @@ def login(request: Request, response: Response, form_data: OAuth2PasswordRequest
     if not user:
         raise HTTPException(status_code=401, detail="Invalid credentials")
     
-    access_token = auth.create_access_token(data={"sub": user.email})
-    refresh_token = auth.create_refresh_token(data={"sub": user.email})
+    access_token = auth.create_access_token(data={"sub": str(user.id)})
+    refresh_token = auth.create_refresh_token(data={"sub": str(user.id)})
 
     response.set_cookie(
         key="refresh_token",
@@ -53,7 +53,7 @@ def logout(request: Request, response: Response):
     response.delete_cookie("refresh_token")
 
 @router.post("/refresh")
-@limiter.limit("5/minute")
+@limiter.limit("30/minute")
 def refresh(request: Request, refresh_token: str = Cookie(None)):
     try:
         new_access_token = refresh_access_token(refresh_token)

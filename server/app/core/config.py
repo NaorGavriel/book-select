@@ -11,6 +11,8 @@ class AuthConfig:
     
 
 class GeneralConfig:
+    MAX_IMAGE_SIZE = int(os.getenv("MAX_IMAGE_SIZE"))
+
     CORS_ALLOWED_ORIGINS = os.getenv("CORS_ALLOWED_ORIGINS")
     REDIS_JOB_URL = os.getenv("REDIS_JOB_URL", "redis://redis:6379/0")
     REDIS_RATELIMIT_URL = os.getenv("RATELIMIT_REDIS_URL", "redis://redis:6379/1")
@@ -23,6 +25,10 @@ class GeneralConfig:
     BOOK_CACHE_THRESHOLD = float(os.getenv("BOOK_CACHE_THRESHOLD",0.8))
     API_LOGGER_NAME = os.getenv("API_LOGGER_NAME", "default_logger")
     STORAGE_BACKEND= os.getenv("STORAGE_BACKEND", "local")
+
+class AWSConfig:
+    AWS_REGION = os.getenv("AWS_REGION")
+    BUCKET_NAME = os.getenv("BUCKET_NAME")
 
 class APIsConfig:
     # Google api settings

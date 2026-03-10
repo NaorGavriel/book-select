@@ -1,21 +1,17 @@
-from PIL import Image
-import io
-import base64
+from PIL import Image, ImageOps
+from io import BytesIO
 
-def prepare_image(image_bytes: bytes) -> str:
-    """Resize, compress, and convert image bytes to base64 JPEG string."""
-    img = Image.open(io.BytesIO(image_bytes))
+def process_image(image_bytes: bytes) -> bytes:
+    with Image.open(BytesIO(image_bytes)) as original_img:
+        img = ImageOps.exif_transpose(original_img)
+        img = ImageOps.fit(img, (1024,1024), method=Image.Resampling.LANCZOS)
 
-    # Ensure no alpha channel
-    if img.mode != "RGB":
-        img = img.convert("RGB")
+        if img.mode in ("RGBA", "LA", "P"):
+            img = img.convert("RGB")
 
-    # Downscale to max 1024x1024 if needed using high-quality resampling
-    img.thumbnail((1024, 1024), Image.LANCZOS)
+        buffer = BytesIO()
+        img.save(buffer, format="JPEG", quality=85, optimize=True)
 
-    buffer = io.BytesIO()
-    img.save(buffer, format="JPEG", quality=85, optimize=True)
+        data = buffer.getvalue()
 
-    data = buffer.getvalue()
-
-    return base64.b64encode(data).decode("utf-8") # Base64 string
+    return data

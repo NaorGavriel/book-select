@@ -1,6 +1,6 @@
 from slowapi import Limiter
-from slowapi.util import get_remote_address
+from app.core.rate_limit.util import rate_limit_key
 from app.core.config import GeneralConfig
 
-limiter = Limiter(key_func=get_remote_address,
+limiter = Limiter(key_func=rate_limit_key,
                     storage_uri=GeneralConfig.REDIS_RATELIMIT_URL)

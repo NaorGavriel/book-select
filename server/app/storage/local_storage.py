@@ -10,11 +10,11 @@ class LocalStorage(StorageBase):
     def __init__(self, base_dir: Path):
         self.base_dir = base_dir
 
-    def save_image(self, *, image_bytes: bytes, filename: str, user_id: int) -> str:
+    def save_image(self, *, image_bytes: bytes, user_id: int) -> str:
         """
         Persist image bytes locally and return the storage key.
         """
-        key = generate_image_key(user_id=user_id, filename=filename)
+        key = generate_image_key(user_id=user_id, extension="jpg")
 
         # image_path is storage backend-specific
         image_path = self.base_dir / key

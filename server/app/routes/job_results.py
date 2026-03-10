@@ -5,7 +5,7 @@ from sqlalchemy.orm import Session
 from app.db import get_db
 from app.services.job_results import get_job_results, get_all_results_for_user
 from app.services.auth import get_current_user
-from app.core.limiter import limiter
+from app.core.rate_limit.limiter import limiter
 
 router = APIRouter(prefix="/results", tags=["results"])
 

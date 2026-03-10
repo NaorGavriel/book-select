@@ -4,7 +4,7 @@ from sqlalchemy.exc import IntegrityError
 from app.schemas.user import UserCreate, UserRead
 from app.services.auth import create_new_user
 from app.db import get_db
-from app.core.limiter import limiter
+from app.core.rate_limit.limiter import limiter
 import logging
 from app.core.config import GeneralConfig
 

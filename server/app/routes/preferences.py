@@ -3,7 +3,7 @@ from sqlalchemy.orm import Session
 from app.schemas.preferences import PreferencesPost
 from app.services.preferences import create_user_preferences, update_user_preferences, InvalidUserId
 from app.db import get_db
-from app.core.limiter import limiter
+from app.core.rate_limit.limiter import limiter
 
 router = APIRouter(prefix='/preferences')
 

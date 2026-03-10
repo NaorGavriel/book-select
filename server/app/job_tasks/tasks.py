@@ -11,6 +11,9 @@ from app.services.scoring.scoring import get_best_similarity, score_book
 import logging
 from app.core.config import GeneralConfig
 
+class JobFailed(Exception):
+    pass
+
 logger = logging.getLogger(GeneralConfig.API_LOGGER_NAME)
 
 @celery_app.task
@@ -40,7 +43,7 @@ def process_job(job_id: int, user_id: int):
 
         
         update_job_status(db, job, status=JobStatus.processing)
-        logger.info(f"job {job_id} processing")
+        logger.info(f"Processing Job: {job_id}")
         storage = get_storage_backend()
 
         
@@ -48,21 +51,24 @@ def process_job(job_id: int, user_id: int):
         detected_books = extract_books_from_image(image_bytes) # Extract raw book candidates from image
         resolved_books = resolve_books(db, detected_books) # Resolve OCR output into structured book candidates
 
-        for candidate in resolved_books:
-            # Score each resolved candidate against user's reading history
-            most_similar_book, similarity = get_best_similarity(db=db, candidate=candidate, user_id=job.user_id)
-            book_result = score_book(candidate=candidate, user_id=job.user_id, similarity=similarity, similar_book=most_similar_book)
-            create_job_result(db=db, book_result=book_result, job_id=job_id)
+        if resolved_books is None:
+            raise(JobFailed("Failed to resolve books in image"))
+        else:
+            for candidate in resolved_books:
+                # Score each resolved candidate against user's reading history
+                most_similar_book, similarity = get_best_similarity(db=db, candidate=candidate, user_id=job.user_id)
+                book_result = score_book(candidate=candidate, user_id=job.user_id, similarity=similarity, similar_book=most_similar_book)
+                create_job_result(db=db, book_result=book_result, job_id=job_id)
 
-        db.commit()
-        update_job_status(db, job, status=JobStatus.completed)
-        logger.info(f"job {job_id} completed")
+            db.commit()
+            update_job_status(db, job, status=JobStatus.completed)
+            logger.info(f"Completed Job: {job_id}")
 
     except Exception as e:
         db.rollback() # Roll back DB changes on failure
         if job is not None:
             update_job_status(db, job, status=JobStatus.failed, error_message=str(e))
-            logger.info(f"job {job_id} failed")
+            logger.info(f"Job: {job_id} Failed")
         raise
 
     finally:
