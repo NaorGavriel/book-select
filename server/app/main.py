@@ -2,6 +2,7 @@ from fastapi import FastAPI
 from contextlib import asynccontextmanager
 from app.db import engine
 from app.models.base import Base
+from app.routes.default import router as default_router
 from app.routes.users import router as users_router
 from app.routes.preferences import router as preferences_router
 from app.routes.jobs import router as jobs_router
@@ -45,6 +46,7 @@ app.add_middleware(BaseHTTPMiddleware, dispatch=logging_middleware)
 app.add_middleware(JWTMiddleware)
 
 # including all routers
+app.include_router(default_router)
 app.include_router(auth_router, prefix="/api")
 app.include_router(users_router, prefix="/api")
 app.include_router(preferences_router, prefix="/api")
