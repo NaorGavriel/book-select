@@ -34,9 +34,7 @@ services:
       API_LOGGER_NAME : ${API_LOGGER_NAME}
       STORAGE_BACKEND : ${STORAGE_BACKEND}
       MAX_IMAGE_SIZE : ${MAX_IMAGE_SIZE}
-      AWS_ACCESS_KEY_ID: ${AWS_ACCESS_KEY_ID}
-      AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY}
-      AWS_REGION: ${AWS_REGION}
+      BUCKET_REGION: ${BUCKET_REGION}
       BUCKET_NAME: ${BUCKET_NAME}
     depends_on:
       - db
@@ -69,8 +67,6 @@ services:
       API_LOGGER_NAME : ${API_LOGGER_NAME}
       STORAGE_BACKEND : ${STORAGE_BACKEND}
       MAX_IMAGE_SIZE : ${MAX_IMAGE_SIZE}
-      AWS_ACCESS_KEY_ID: ${AWS_ACCESS_KEY_ID}
-      AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY}
       AWS_REGION: ${AWS_REGION}
       BUCKET_NAME: ${BUCKET_NAME}
     depends_on: # Worker must start after Redis (broker) and Postgres (storage)

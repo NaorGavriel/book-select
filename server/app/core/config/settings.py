@@ -33,7 +33,7 @@ class Settings(BaseSettings):
 
     MAX_IMAGE_SIZE: int
 
-    AWS_REGION: str | None = None
+    BUCKET_REGION: str | None = None
     BUCKET_NAME: str | None = None
 
     DEPLOYMENT_TYPE: str = "local"

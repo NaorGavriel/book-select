@@ -10,7 +10,7 @@ class S3Storage(StorageBase):
 
     def __init__(self):
         self.bucket_name = settings.BUCKET_NAME
-        self.s3 = boto3.client("s3", region_name=settings.AWS_REGION)
+        self.s3 = boto3.client("s3", region_name=settings.BUCKET_REGION)
 
     def save_image(self, *, image_bytes: bytes, user_id: int) -> str:
         """
