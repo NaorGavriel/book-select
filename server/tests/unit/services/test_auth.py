@@ -27,52 +27,62 @@ from app.services.auth import (
     create_access_token
 )
 
+
+# =========================
+# Passwords
+# =========================
+
 def test_hash_and_verify_password():
     """
     Ensure passwords are hashed and verified correctly.
-
-    - Hash should not equal raw password
-    - Correct password should validate
-    - Incorrect password should fail
     """
     password = "my_secret"
 
     hashed = hash_password(password)
 
     assert hashed != password
-    assert verify_password(password, hashed) is True
-    assert verify_password("wrong", hashed) is False
+    assert verify_password(password, hashed)
+    assert not verify_password("wrong", hashed)
 
-def test_authenticate_user_success(mocker):
+
+# =========================
+# authenticate_user
+# =========================
+
+def test_authenticate_user_success(mocker, fake_user, mock_db):
     """
     Should return user when email exists and password matches.
     """
-    password = "1234"
-    fake_user = mocker.Mock()
-    fake_user.password_hash = hash_password(password)
-
-    mocker.patch("app.services.auth.get_user", return_value=fake_user)
-        
-    result = authenticate_user(db=None, email="test@example.com", password=password)
-
-    assert result == fake_user
-
-def test_authenticate_user_wrong_password(mocker):
-    """
-    Should return False when password is incorrect.
-    """
-    fake_user = mocker.Mock()
-    fake_user.password_hash = hash_password("correct")
-
+    # fake_user already has password "correct" from fixture
     mocker.patch("app.services.auth.get_user", return_value=fake_user)
 
     result = authenticate_user(
-        db=None,
+        db=mock_db,
+        email="test@example.com",
+        password="correct"
+    )
+
+    assert result == fake_user
+
+
+def test_authenticate_user_wrong_password(mocker, fake_user, mock_db):
+    """
+    Should return False when password is incorrect.
+    """
+    mocker.patch("app.services.auth.get_user", return_value=fake_user)
+
+    result = authenticate_user(
+        db=mock_db,
         email="test@example.com",
         password="wrong"
     )
 
     assert result is False
+
+
+# =========================
+# Refresh token errors
+# =========================
 
 def test_refresh_access_token_invalid_token():
     """
@@ -83,6 +93,7 @@ def test_refresh_access_token_invalid_token():
 
     assert "Invalid refresh token" in str(exc.value)
 
+
 def test_refresh_access_token_missing():
     """
     Testing empty refresh token
@@ -92,62 +103,68 @@ def test_refresh_access_token_missing():
 
     assert "Missing refresh token" in str(exc.value)
 
+
 def test_refresh_access_token_wrong_type():
     """
     Should raise when token is not a refresh token.
     """
     access_token = create_access_token({"sub": "test@example.com"})
 
-    with pytest.raises(InvalidRefreshToken):
+    with pytest.raises(InvalidRefreshToken) as exc:
         refresh_access_token(access_token)
+
+    assert "Invalid token type" in str(exc.value)
+
+
+# =========================
+# Token creation
+# =========================
 
 def test_create_access_token():
     """
     Ensure access token is created with correct payload.
-
-    - Token should include 'sub' (subject)
-    - Token type should be 'access'
-    - Decoding should return original data
     """
-    data = {"sub": "test@example.com"}
-
-    token = create_access_token(data)
-
+    token = create_access_token({"sub": "test@example.com"})
     payload = decode_token(token)
 
     assert payload["sub"] == "test@example.com"
     assert payload["type"] == "access"
+
 
 def test_create_refresh_token():
     """
     Should create a refresh token with correct payload.
     """
-    data = {"sub": "test@example.com"}
-
-    token = create_refresh_token(data)
+    token = create_refresh_token({"sub": "test@example.com"})
     payload = decode_token(token)
 
     assert payload["sub"] == "test@example.com"
     assert payload["type"] == "refresh"
 
-def test_refresh_access_token_success():
+
+# =========================
+# Refresh token success
+# =========================
+
+def test_refresh_access_token_success(valid_refresh_token):
     """
     Should generate a new access token from a valid refresh token.
     """
-    refresh_token = create_refresh_token({"sub": "test@example.com"})
-
-    new_access = refresh_access_token(refresh_token)
+    new_access = refresh_access_token(valid_refresh_token)
     payload = decode_token(new_access)
 
     assert payload["sub"] == "test@example.com"
     assert payload["type"] == "access"
 
-def test_create_new_user(mocker):
+
+# =========================
+# create_new_user
+# =========================
+
+def test_create_new_user(mocker, mock_db):
     """
     Should hash password and pass it to create_user.
     """
-    mock_db = mocker.Mock()
-
     mock_create_user = mocker.patch("app.services.auth.create_user")
 
     create_new_user(mock_db, "test@example.com", "password123")
