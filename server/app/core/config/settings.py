@@ -4,11 +4,11 @@ from typing import List
 
 class Settings(BaseSettings):
 
-    PG_USER: str
-    PG_PW: str
-    PG_DB: str
-    PG_HOST: str = "db"
-    PG_PORT: int = 5432
+    POSTGRES_USER: str
+    POSTGRES_PW: str
+    POSTGRES_DB: str
+    POSTGRES_HOST: str = "db"
+    POSTGRES_PORT: int = 5432
 
     REDIS_JOBS_URL: str
     REDIS_RATELIMIT_URL: str
@@ -40,9 +40,9 @@ class Settings(BaseSettings):
 
     @property
     def database_url(self) -> str:
-        return f"postgresql://{self.PG_USER}:{self.PG_PW}@{self.PG_HOST}:{self.PG_PORT}/{self.PG_DB}"
+        return f"postgresql://{self.POSTGRES_USER}:{self.POSTGRES_PW}@{self.POSTGRES_HOST}:{self.POSTGRES_PORT}/{self.POSTGRES_DB}"
 
     model_config = SettingsConfigDict(
-        env_file=".env",
+        env_file="../.env",
         extra="ignore"
     )
