@@ -15,7 +15,7 @@ from app.core.config.config import settings
 
 logger = logging.getLogger(settings.API_LOGGER_NAME)
 
-def resolve_books(db: Session, detected_books: list[str]) -> list[Book]:
+def resolve_books(db: Session, detected_books: list[str]) -> list[Book] | None:
     """
     Resolve a list of detected book strings to Book records.
 
@@ -66,7 +66,7 @@ def resolve_books(db: Session, detected_books: list[str]) -> list[Book]:
         resolved.append(book_match)
 
     logger.info(f"Resolved {len(resolved)} books")
-    if resolve_books == []:
+    if not resolved:
         return None
     
     return resolved

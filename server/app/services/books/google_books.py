@@ -1,8 +1,11 @@
 """
 Google Books integration.
 
-Handles external search requests and transforms API responses
-into the internal book data format.
+Handles:
+- Query construction
+- External API requests
+- Result filtering
+- Data transformation into internal format
 """
 import httpx
 from app.utils.text import normalize_authors, normalize_title, normalize_text
@@ -17,43 +20,47 @@ if not settings.GOOGLE_BOOKS_API_KEY:
 
 logger = logging.getLogger(settings.API_LOGGER_NAME)
 
-def search_google_books(search_term : str = None, title : str = None, author : str = None):
-
+def search_google_books(
+    search_term: str = None,
+    title: str = None,
+    author: str = None,
+):
     """
-    Query Google Books and return the top candidate.
-
-    Args:
-        search_term: Normalized search string.
-        title: normalized book title.
-        author : normalized book author.
+    Query Google Books and return the best matching result.
 
     Returns:
-        First volume result dict, or None if no results are found.
+        A single volume dict or None if no valid result is found.
     """
-    if (title and author): # searching by title and author if exists or by a search term
-        query_term = f'intitle:"{title}" inauthor:"{author}"'
-    else :
-        query_term = search_term
-
-    if query_term is None:
+    query = _build_query(search_term, title, author)
+    if query is None:
         return None
 
+    items = _fetch_books(query)
+    return filter_results(items, author)
+
+
+def _build_query(search_term: str, title: str, author: str) -> str | None:
+    """Construct query string for Google Books API."""
+    if title and author:
+        return f'intitle:"{title}" inauthor:"{author}"'
+    return search_term
+
+def _fetch_books(query: str) -> list[dict]:
+    """Fetch raw results from Google Books API."""
     params = {
-        "q": query_term,
+        "q": query,
         "langRestrict": "en",
         "maxResults": settings.GOOGLE_BOOKS_MAX_RESULTS,
         "key": settings.GOOGLE_BOOKS_API_KEY,
     }
 
-    with httpx.Client(timeout=5.0) as client: # Short timeout to prevent worker blocking on external API
+    with httpx.Client(timeout=5.0) as client:
         logger.info("google books api call")
         resp = client.get(BASE_URL, params=params)
         resp.raise_for_status()
         data = resp.json()
-        candidates = data.get("items", [])
-        best_book = filter_results(items=candidates, author=author)
 
-    return best_book
+    return data.get("items", [])
 
 def extract_book_data(item: dict) -> dict:
     """
@@ -75,11 +82,11 @@ def extract_book_data(item: dict) -> dict:
             break
 
     title = v.get("title")
-    authors = v.get("authors")
+    authors = v.get("authors") or []
     description = v.get("description")
     genres = v.get("categories", [])
 
-    if len(description) > MAX_DESCRIPTION_LENGTH: # truncating long descriptions
+    if description and len(description) > MAX_DESCRIPTION_LENGTH: # truncating long descriptions
         description = description[:MAX_DESCRIPTION_LENGTH]
 
     book_data = {
@@ -101,7 +108,7 @@ def extract_book_data(item: dict) -> dict:
 def filter_results(items: list[dict], author : str = None) -> list[dict]:
     """
     Filters Google Books API results, keeps the most relevant book in english that includes these features:
-        - description 
+        - description
         - title
         - author
     """
@@ -125,7 +132,4 @@ def filter_results(items: list[dict], author : str = None) -> list[dict]:
             else :
                 filtered.append(item)
 
-    if not filtered:
-        return None
-
-    return filtered[0] # most relevant
+    return filtered[0] if filtered else None
