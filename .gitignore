@@ -214,3 +214,4 @@ server/storage/
 .vscode/settings.json
 client/node_modules
 CLAUDE.md
+tasks/admin_dashboard.md
