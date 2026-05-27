@@ -23,7 +23,6 @@ from app.core.rate_limit.limiter import limiter
 # lifespan method, in charge of init required before application startup and shutdowns before application shutdown
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    Base.metadata.create_all(bind=engine)
     init_logging()  # starting logging thread
     yield
 
