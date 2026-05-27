@@ -1,6 +1,8 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { AuthProvider } from "./features/authentication/AuthContext";
 import RequireAuth from "./features/authentication/RequireAuth";
+import RequireAdmin from "./features/authentication/RequireAdmin";
+import AdminDashboardPage from "./pages/AdminDashboardPage";
 import LoginPage from "./pages/LoginPage";
 import RegisterPage from "./pages/RegistrationPage";
 import HomePage from "./pages/HomePage";
@@ -45,6 +47,13 @@ function AppContent() {
             <Route path="/recommendations" element={<RecommendationsPage />} />
             <Route path="/reading-history" element={<ReadingHistoryPage />} />
             <Route path="/upload" element={<UploadPage />} />
+          </Route>
+
+          {/* Admin Pages */}
+          <Route element={<RequireAdmin />}>
+            <Route element={<Layout headerRight={<LogoutButton/>}/>}>
+              <Route path="/admin/dashboard" element={<AdminDashboardPage />} />
+            </Route>
           </Route>
         </Route>
       </Route>
