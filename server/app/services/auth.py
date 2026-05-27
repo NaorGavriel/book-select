@@ -128,6 +128,21 @@ def refresh_access_token(refresh_token: str) -> str:
 
     return create_access_token({"sub": email})
 
+def get_current_admin_user(user: User = Depends(get_current_user)) -> User:
+    """
+    Validate that the authenticated user holds admin privileges.
+
+    Raises:
+        HTTPException: 403 if the user is not an admin.
+    """
+    if not user.is_admin:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Admin privileges required",
+        )
+    return user
+
+
 def decode_token(token : str):
     try:
         payload = jwt.decode(token, settings.JWT_SECRET, algorithms=[settings.HASH_ALGORITHM])

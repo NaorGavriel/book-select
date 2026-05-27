@@ -9,6 +9,7 @@ from app.routes.jobs import router as jobs_router
 from app.routes.job_results import router as job_results_router
 from app.routes.user_book import router as user_book_router
 from app.routes.auth import router as auth_router
+from app.routes.metrics import router as metrics_router
 from fastapi.middleware.cors import CORSMiddleware
 from starlette.middleware.base import BaseHTTPMiddleware
 import app.models
@@ -51,3 +52,4 @@ app.include_router(preferences_router, prefix="/api")
 app.include_router(jobs_router, prefix="/api")
 app.include_router(job_results_router, prefix="/api")
 app.include_router(user_book_router, prefix="/api")
+app.include_router(metrics_router, prefix="/api")
