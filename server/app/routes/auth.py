@@ -31,7 +31,12 @@ def login(request: Request, response: Response, form_data: OAuth2PasswordRequest
     if not user:
         raise HTTPException(status_code=401, detail="Invalid credentials")
     
-    access_token = auth.create_access_token(data={"sub": str(user.id)})
+    access_token = auth.create_access_token(
+        data={
+            "sub": str(user.id),
+            "is_admin": user.is_admin
+            }
+    )
     refresh_token = auth.create_refresh_token(data={"sub": str(user.id)})
 
     response.set_cookie(
@@ -54,9 +59,9 @@ def logout(request: Request, response: Response):
 
 @router.post("/refresh")
 @limiter.limit("30/minute")
-def refresh(request: Request, refresh_token: str = Cookie(None)):
+def refresh(request: Request, refresh_token: str = Cookie(None), db: Session = Depends(get_db)):
     try:
-        new_access_token = refresh_access_token(refresh_token)
+        new_access_token = refresh_access_token(refresh_token, db)
     except InvalidRefreshToken as e:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
