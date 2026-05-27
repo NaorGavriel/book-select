@@ -11,7 +11,7 @@ import { useNavigate, useLocation } from "react-router-dom";
   * refresh token stored as cookie
   */
 export default function LoginForm() {
-    const { accessToken, setAccessToken } = useAuth();
+    const { accessToken, setAccessToken, setIsAdmin } = useAuth();
     const location = useLocation();
     const from = location.state?.from?.pathname || "/home";
 
@@ -38,8 +38,8 @@ export default function LoginForm() {
             ,});
 
         const { access_token } = response.data;
-
-        // store token
+        const payload = JSON.parse(atob(access_token.split(".")[1]));
+        setIsAdmin(payload.is_admin === true);
         setAccessToken(access_token);
         
         console.log("Logged in!");
