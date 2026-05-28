@@ -117,6 +117,16 @@ function Section({
   );
 }
 
+function RankedPanel({ title, items }: { title: string; items: { label: string; count: number }[] }) {
+  /** Titled card wrapping a RankedList. */
+  return (
+    <div className="rounded-2xl border border-neutral-800 bg-neutral-900/80 p-5">
+      <h3 className="mb-4 text-lg font-semibold text-stone-100">{title}</h3>
+      <RankedList items={items} />
+    </div>
+  );
+}
+
 function RankedList({ items }: { items: { label: string; count: number }[] }) {
   return (
     <ol className="space-y-2">
@@ -327,44 +337,18 @@ export default function AdminDashboardPage() {
           subtitle="Most recommended books, authors and genres"
         >
           <div className="grid grid-cols-1 xl:grid-cols-3 gap-6">
-            <div className="rounded-2xl border border-neutral-800 bg-neutral-900/80 p-5">
-              <h3 className="mb-4 text-lg font-semibold text-stone-100">
-                Top Books
-              </h3>
-
-              <RankedList
-                items={rec.top_books.map((b) => ({
-                  label: b.title,
-                  count: b.count,
-                }))}
-              />
-            </div>
-
-            <div className="rounded-2xl border border-neutral-800 bg-neutral-900/80 p-5">
-              <h3 className="mb-4 text-lg font-semibold text-stone-100">
-                Top Authors
-              </h3>
-
-              <RankedList
-                items={rec.top_authors.map((a) => ({
-                  label: a.author,
-                  count: a.count,
-                }))}
-              />
-            </div>
-
-            <div className="rounded-2xl border border-neutral-800 bg-neutral-900/80 p-5">
-              <h3 className="mb-4 text-lg font-semibold text-stone-100">
-                Top Genres
-              </h3>
-
-              <RankedList
-                items={rec.top_genres.map((g) => ({
-                  label: g.genre,
-                  count: g.count,
-                }))}
-              />
-            </div>
+            <RankedPanel
+              title="Top Books"
+              items={rec.top_books.map((b) => ({ label: b.title, count: b.count }))}
+            />
+            <RankedPanel
+              title="Top Authors"
+              items={rec.top_authors.map((a) => ({ label: a.author, count: a.count }))}
+            />
+            <RankedPanel
+              title="Top Genres"
+              items={rec.top_genres.map((g) => ({ label: g.genre, count: g.count }))}
+            />
           </div>
         </Section>
       </div>
