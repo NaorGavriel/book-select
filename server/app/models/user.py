@@ -1,5 +1,5 @@
 from sqlalchemy.orm import Mapped, mapped_column, relationship
-from sqlalchemy import String, Integer
+from sqlalchemy import Boolean, String, Integer
 
 from app.models.base import Base
 
@@ -16,6 +16,8 @@ class User(Base):
     email: Mapped[str] = mapped_column(String, unique=True, index=True)
 
     password_hash: Mapped[str] = mapped_column(String)
+
+    is_admin: Mapped[bool] = mapped_column(Boolean, default=False, server_default="false")
 
     # One-to-one relationship to the user's preferences
     preferences = relationship(

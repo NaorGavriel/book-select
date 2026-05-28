@@ -11,7 +11,7 @@ import { useNavigate } from "react-router-dom";
  */
 export default function LogoutButton() {
   const api = useAxios();
-  const { setAccessToken } = useAuth();
+  const { setAccessToken, setIsAdmin } = useAuth();
   const navigate = useNavigate();
 
   const handleLogout = async () => {
@@ -21,8 +21,9 @@ export default function LogoutButton() {
     } catch (err) {
 
     } finally {
-      // Clear access token from memory
+      // Clear access token and admin flag from memory
       setAccessToken(null);
+      setIsAdmin(false);
       navigate("/");
     }
   };

@@ -6,6 +6,7 @@ import { Menu } from "lucide-react";
 import DesktopNav from "./DesktopNav";
 import MobileMenu from "./MobileMenu";
 import { NAV_LINKS } from "./navLinks";
+import { useAuth } from "../../../features/authentication/AuthContext";
 
 
 
@@ -21,6 +22,8 @@ type HeaderProps = {
 
 export default function Header({ rightContent }: HeaderProps) {
   const [menuOpen, setMenuOpen] = useState(false); // Controls whether the mobile navigation menu is visible.
+  const { isAdmin } = useAuth();
+  const links = isAdmin ? [...NAV_LINKS, { to: "/admin/dashboard", label: "Dashboard" }] : NAV_LINKS;
 
   return (
     <header className="sticky top-0 z-40 w-full border-b border-neutral-700 bg-neutral-900/92 backdrop-blur">
@@ -36,7 +39,7 @@ export default function Header({ rightContent }: HeaderProps) {
               BookSelect
             </Link>
 
-            <DesktopNav links={NAV_LINKS} />
+            <DesktopNav links={links} />
 
           </div>
 
@@ -63,7 +66,7 @@ export default function Header({ rightContent }: HeaderProps) {
 
         {/* Mobile navigation menu */}
         <MobileMenu
-          links={NAV_LINKS}
+          links={links}
           menuOpen={menuOpen}
           onNavigate={() => setMenuOpen(false)}
           rightContent={rightContent}

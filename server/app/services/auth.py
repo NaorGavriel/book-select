@@ -110,7 +110,7 @@ def get_current_user(request: Request,token : str = Depends(oauth2_bearer), db: 
     
     return user
 
-def refresh_access_token(refresh_token: str) -> str:
+def refresh_access_token(refresh_token: str, db : Session) -> str:
     if not refresh_token:
         raise InvalidRefreshToken("Missing refresh token")
 
@@ -122,11 +122,32 @@ def refresh_access_token(refresh_token: str) -> str:
     if payload.get("type") != "refresh":
         raise InvalidRefreshToken("Invalid token type")
 
-    email = payload.get("sub")
-    if not email:
+    user_id = payload.get("sub")
+    if not user_id:
         raise InvalidRefreshToken("Invalid token payload")
 
-    return create_access_token({"sub": email})
+    user = db.get(User, int(user_id)) 
+
+    if not user: 
+        raise InvalidRefreshToken("User not found") 
+    
+    return create_access_token({ "sub": str(user.id),
+                                "is_admin": user.is_admin })
+
+def get_current_admin_user(user: User = Depends(get_current_user)) -> User:
+    """
+    Validate that the authenticated user holds admin privileges.
+
+    Raises:
+        HTTPException: 403 if the user is not an admin.
+    """
+    if not user.is_admin:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Admin privileges required",
+        )
+    return user
+
 
 def decode_token(token : str):
     try:

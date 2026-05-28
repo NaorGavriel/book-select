@@ -10,6 +10,8 @@ import { createContext, useContext, useState } from "react";
 type AuthContextType = {
   accessToken: string | null;
   setAccessToken: (token: string | null) => void;
+  isAdmin: boolean;
+  setIsAdmin: (isAdmin: boolean) => void;
 };
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -21,9 +23,10 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
  */
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [accessToken, setAccessToken] = useState<string | null>(null);
+  const [isAdmin, setIsAdmin] = useState<boolean>(false);
 
   return (
-    <AuthContext.Provider value={{ accessToken, setAccessToken }}>
+    <AuthContext.Provider value={{ accessToken, setAccessToken, isAdmin, setIsAdmin }}>
       {children}
     </AuthContext.Provider>
   );
