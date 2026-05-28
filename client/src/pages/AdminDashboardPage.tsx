@@ -255,7 +255,7 @@ export default function AdminDashboardPage() {
 
         <Section
           title="Cache"
-          subtitle="Recommendation cache efficiency and lookup behavior"
+          subtitle="Book cache efficiency and lookup behavior"
         >
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
             <StatCard label="Hits" value={cache.hits} accent="green" />
