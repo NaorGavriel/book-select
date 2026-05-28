@@ -5,14 +5,16 @@ import { useAuth } from "../AuthContext";
 
 
 const PersistLogin = () => {
-  const { accessToken } = useAuth();
+  const { accessToken, setIsAdmin } = useAuth();
   const refresh = useRefreshToken();
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const verifyRefresh = async () => {
         try {
-            await refresh();
+            const newToken = await refresh();
+            const payload = JSON.parse(atob(newToken.split(".")[1]));
+            setIsAdmin(payload.is_admin === true);
         } catch (err) {
             console.log(err)
         } finally {
