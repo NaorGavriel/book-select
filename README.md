@@ -18,7 +18,7 @@ The system extracts book titles from uploaded bookshelf images using OCR, enrich
 - Git
 
 ## Installation & Running the Application
-1. Clone the repository :
+1. Clone the repository & navigate to the project root directory:
 ```
 git clone https://github.com/NaorGavriel/book-select.git
 cd book-select
