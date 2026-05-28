@@ -62,6 +62,13 @@ cp .env.example .env
 5. Upload the image to the application.
 6. View personalized recommendations.
 
+## Admin Access
+After registering a normal account, promote the user to admin from the project root directory:
+```
+docker compose exec api python -m scripts.promote_user user@example.com
+```
+Admin users can access the operational dashboard and protected admin endpoints.
+
 ## Database Migrations
 
 After modifying SQLAlchemy models, create a new migration from the project root directory:
