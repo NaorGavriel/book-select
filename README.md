@@ -13,18 +13,29 @@ The system extracts book titles from uploaded bookshelf images using OCR, enrich
 
 ## Prerequisites
 - Docker (Docker Desktop)
+- OpenAI API key
+- Google Books API key
+- Git
 
-## Installation
+## Installation & Running the Application
 1. Clone the repository :
 ```
 git clone https://github.com/NaorGavriel/book-select.git
 cd book-select
 ```
-2. Start backend + frontend services :
+2. Create a .env file in the project root:
+```
+cp .env.example .env
+```
+3. Start backend, frontend, database, and Redis services :
 ```
 docker compose up --build
 ```
-3. Access the application at :
+4. In a separate terminal (from the project root directory), apply database migrations:
+```
+docker compose exec api alembic upgrade head
+```  
+5. Access the application at :
    ```http://localhost:5173```
 
 ## Environment Variables
@@ -50,3 +61,14 @@ cp .env.example .env
 4. Snap a photo of a bookshelf (ensure book spines are clearly visible).
 5. Upload the image to the application.
 6. View personalized recommendations.
+
+## Database Migrations
+
+After modifying SQLAlchemy models, create a new migration from the project root directory:
+```
+docker compose exec api alembic revision --autogenerate -m "describe your change"
+```
+Then apply the migration:
+```
+docker compose exec api alembic upgrade head
+```
