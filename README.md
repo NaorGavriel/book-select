@@ -11,6 +11,38 @@ The system extracts book titles from uploaded bookshelf images using OCR, enrich
    <img src="https://github.com/NaorGavriel/book-select/blob/main/screenshots/results-screenshot.png?raw=true" width="25%" />
 </p>
 
+## Architecture
+
+BookSelect is built as a distributed system with asynchronous job processing,
+designed to handle the latency of OCR and external API calls without blocking
+the user.
+
+### System overview
+
+![Architecture diagram](./docs/bookselect-system-architecture.svg)
+
+The backend is split between a **FastAPI** server handling HTTP requests and
+**Celery workers** processing scan jobs asynchronously. **Redis** acts as the
+message broker between them. **PostgreSQL** stores users, reading history,
+job results, and a cache of book metadata fetched from the Google
+Books API.
+
+### AWS deployment
+
+Deployed on AWS with the following setup:
+
+- **CloudFront + S3** serve the React frontend globally
+- **ECS Fargate** runs FastAPI and Celery workers
+- **Application Load Balancer** distributes traffic across two availability zones
+- **RDS PostgreSQL** (multi-AZ) and **ElastiCache Redis** handle data persistence
+  and job queuing in a private data subnet
+- A **VPC endpoint** routes S3 traffic privately without going through the NAT gateway
+- A single **NAT gateway** in AZ-a handles outbound calls to the OCR model and
+  Google Books API
+
+For the detailed request flow of the bookshelf scan feature, see
+[docs/sequence-scan-feature.md](./docs/bookshelf_scan_feature_squence.md).
+
 ## Prerequisites
 - Docker (Docker Desktop)
 - OpenAI API key
@@ -37,24 +69,18 @@ docker compose exec api alembic upgrade head
 ```  
 5. Access the application at :
    ```http://localhost:5173```
-
-## Environment Variables
-Create a `.env` file in the project root and fill in the required variables.
-You can use the provided template:
-
-```
-cp .env.example .env
-```
-
+   
 ## Features
-- Extracts book titles from uploaded bookshelf images using OCR
-- Generates personalized book recommendations using semantic similarity search based on reading history
-- Enriches detected books with metadata (authors, description, categories)
-- Asynchronous background processing using Celery and Redis
+
+- Bookshelf scanning via OCR with personalized recommendations based on reading history
+- Semantic similarity search using vector embeddings
+- Asynchronous background processing (Celery + Redis)
 - Secure authentication with JWT
-- API rate limiting to prevent abuse
+- API rate limiting
+- Admin dashboard with protected endpoints
 
 ## Usage
+
 1. Open the application at `http://localhost:5173`.
 2. Register an account and log in.
 3. Add books you enjoy to your reading history.
@@ -63,6 +89,7 @@ cp .env.example .env
 6. View personalized recommendations.
 
 ## Admin Access
+
 After registering a normal account, promote the user to admin from the project root directory:
 ```
 docker compose exec api python -m scripts.promote_user user@example.com
