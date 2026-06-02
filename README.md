@@ -30,14 +30,16 @@ Books API.
 ### AWS deployment
 
 Deployed on AWS with the following setup:
-![Architecture diagram](./docs/aws_deployment_architecture.svg)
+
+<img src="./docs/aws_deployment_architecture.png" width="800" alt="AWS Architecture Diagram">
+
 - **CloudFront + S3** serve the React frontend globally
 - **ECS Fargate** runs FastAPI and Celery workers
 - **Application Load Balancer** distributes traffic across two availability zones
 - **RDS PostgreSQL** (multi-AZ) and **ElastiCache Redis** handle data persistence
   and job queuing in a private data subnet
 - A **VPC endpoint** routes S3 traffic privately without going through the NAT gateway
-- A single **NAT gateway** in AZ-a handles outbound calls to the OCR model and
+- **NAT gateway** handles outbound calls to the OCR model and
   Google Books API
 
 For the detailed request flow of the bookshelf scan feature, see
