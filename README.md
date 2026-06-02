@@ -30,7 +30,7 @@ Books API.
 ### AWS deployment
 
 Deployed on AWS with the following setup:
-
+![Architecture diagram](./docs/aws_deployment_architecture.svg)
 - **CloudFront + S3** serve the React frontend globally
 - **ECS Fargate** runs FastAPI and Celery workers
 - **Application Load Balancer** distributes traffic across two availability zones
